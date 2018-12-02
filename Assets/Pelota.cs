@@ -6,36 +6,44 @@ public class Pelota : MonoBehaviour {
 
     #region Atributos
     public float velocidad;
-
     bool vueltaACasa;
-    Vector3 posicionOriginal;
+
+    Vector3 posicionOriginal;   //Position
     #endregion
 
     // Use this for initialization
     void Start () {
-        vueltaACasa = false;
         posicionOriginal = transform.position;
-    
-    }
-	
-	// Update is called once per frame
-	void Update () {
-        
-        if (vueltaACasa) {
-            float speed = 3.0f * Time.deltaTime;
-            transform.position += Vector3.MoveTowards(transform.position, posicionOriginal, speed);
-        }    
+        Physics2D.IgnoreLayerCollision(9, 9);         //Hace que las pelotas se ignoren (Todas están en layer 9)
     }
 
-
-    public void LaunchBall(Vector3 dir)
+    void Update()
     {
-        GetComponent<Rigidbody2D>().velocity = dir * 200 * Time.deltaTime;
+        
+        if (vueltaACasa)
+        {
+            float speed = 3.0f * Time.deltaTime;
+            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            transform.position = Vector3.MoveTowards(transform.position, posicionOriginal, speed);
+        }
+    }
+
+
+
+    public void LaunchBall(Vector2 dir)
+    {
+        GetComponent<Rigidbody2D>().velocity = dir * velocidad * Time.deltaTime;
+    }
+
+    public void SetVueltaACasa()
+    {
+        vueltaACasa = true;
+        Debug.Log("A CASITA JAJA");
+        
     }
 
 }
 
 
-//TODO: Hacer que las pelotas no reboten entre ellas porque eso es muy gay
-//TODO: Corregir la direccion inicial de disparo de las pelotas 
-//TODO: Intentar instanciarlas con velocidad sin acceder al componente de RigidBody2D 
+//TODO: Intentar instanciarlas con velocidad sin acceder al componente de RigidBody2D <- Se puede???
+//TODO: Que vayan al puto spawner ANTES DE ACTUALIZAR SU POSICION
