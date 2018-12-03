@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 222179639186329756}
   - component: {fileID: 114061170840797566}
   - component: {fileID: 61730034375728410}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BloqueBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 224584362836523404}
   - component: {fileID: 23607751761584792}
   - component: {fileID: 102415025027439856}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Numero
   m_TagString: Untagged
   m_Icon: {fileID: 0}

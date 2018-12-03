@@ -22,7 +22,7 @@ public class Pelota : MonoBehaviour {
         
         if (vueltaACasa)
         {
-            float speed = 3.0f * Time.deltaTime;
+            float speed = 10.0f * Time.deltaTime;
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             transform.position = Vector3.MoveTowards(transform.position, posicionOriginal, speed);
         }
@@ -38,6 +38,7 @@ public class Pelota : MonoBehaviour {
     public void SetVueltaACasa()
     {
         vueltaACasa = true;
+        GetComponent<CircleCollider2D>().isTrigger = true; //Ignora colisiones con los bloques
         Debug.Log("A CASITA JAJA");
         
     }

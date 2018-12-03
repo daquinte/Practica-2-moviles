@@ -18,10 +18,11 @@ public class ShootLine : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-      
-       // Update position of the two vertex of the Line Renderer
-       
-       line.SetPosition(0, new Vector2(Input.mousePosition.x, Input.mousePosition.y).normalized);
-       line.SetPosition(1, Spawner.transform.position);
+
+        // Update position of the two vertex of the Line Renderer
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+
+        line.SetPosition(0, mousePos);
+        line.SetPosition(1, Spawner.transform.position);
     }
 }

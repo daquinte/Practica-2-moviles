@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
     #region Attributes
     int numMaxPelotas;      //Numero (máximo actual) de pelotas que va a generar el spawner.
     int numPelotasAct;      //Numero de pelotas por el tablero
-
-    bool GameRoundEnded; //Pues eso
 
     public Spawner spawner;
     Vector3 spawnerPosition;
@@ -17,6 +16,11 @@ public class GameManager : MonoBehaviour {
     bool puedeInstanciar;
 
     LineRenderer shootLine;
+
+    public Button vueltaCasa;
+    GameObject [] pelotas;
+    int contador = 0;
+
     #endregion
 
     #region Singleton
@@ -54,7 +58,7 @@ public class GameManager : MonoBehaviour {
 
         //INPUT
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && puedeInstanciar)
         {
             shootLine.enabled = true;
         }
@@ -67,6 +71,18 @@ public class GameManager : MonoBehaviour {
             puedeInstanciar = false;
         }
     
+    }
+
+
+    public void Recogida()
+    {
+        pelotas = GameObject.FindGameObjectsWithTag("Bola");
+
+        foreach (GameObject p in pelotas)
+        {
+            p.GetComponent<Pelota>().SetVueltaACasa();
+        }
+
     }
 
  
