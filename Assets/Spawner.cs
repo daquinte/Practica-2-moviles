@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum SpawnerState { Lanzamiento, Espera };
+
 
 
 public class Spawner : MonoBehaviour {
@@ -11,22 +11,23 @@ public class Spawner : MonoBehaviour {
 
     TextMesh textoPelotas;
 
-    private SpawnerState spawnerState;
-    public int numBolasSpawner;
-    private int numBolasPorLLegar;
+
+    int numBolasASpawnear;
+    int numBolasEnSpawner;
     #endregion
 
     // Use this for initialization
     void Start () {
         textoPelotas = GetComponentInChildren<TextMesh>();
-        spawnerState = SpawnerState.Lanzamiento; 
     }
 
     private void Update()
     {
-        textoPelotas.text = (numBolasSpawner - numBolasPorLLegar).ToString();
+        
+        textoPelotas.text = (numBolasEnSpawner).ToString();
     }
 
+    /*
     private void OnTriggerEnter2D (Collider2D collision)
     {
         if(spawnerState == SpawnerState.Espera
@@ -40,45 +41,47 @@ public class Spawner : MonoBehaviour {
             if(numBolasPorLLegar <= 0)
             {
                 //Actualizo posicion spawner (actualizada en la primera bola)
-                transform.position = GameManager.instance.GetSpawnerPosition();
+                transform.position = LevelManager.instance.GetSpawnerPosition();
 
                 //Preparamos la nueva ronda de juego
                 spawnerState = SpawnerState.Lanzamiento;
-                GameManager.instance.PreparaSiguienteGameRound();
+                LevelManager.instance.PreparaSiguienteGameRound();
             }
         }
+    }*/
+
+     public void ActualizaPosicionSpawner(Vector3 nuevaPos)
+    {
+        transform.position = nuevaPos;
     }
 
-    public void GeneraPelotas(int numMaxPelotasAct)
+    public void GeneraPelotas(int numMaxPelotasAct, Pelota p)
     {
-        numBolasSpawner = numMaxPelotasAct;
-        textoPelotas.text = numBolasSpawner.ToString();
-        StartCoroutine(InstanciaPelota());
+        numBolasASpawnear = numMaxPelotasAct;
+        numBolasEnSpawner = numMaxPelotasAct;
+        StartCoroutine(InstanciaPelota(p));
     }
 
-    IEnumerator InstanciaPelota()
+    IEnumerator InstanciaPelota(Pelota pelotaPrefab)
     {
-        for (int i = 0; i < numBolasSpawner; i++)
+        for (int i = 0; i < numBolasASpawnear; i++)
         {
-            //La pongo un poco por encima para el deathzone
-            
-            GameObject pelotaAux = Instantiate(PelotaPrefab, transform.position, Quaternion.identity);
+            Pelota nuevaPelota = Instantiate(pelotaPrefab);
 
             Vector3 mousePos = Input.mousePosition;
             Vector2 targetPos = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y));
 
             Vector2 dir = (targetPos - new Vector2(transform.position.x, transform.position.y)).normalized;
 
-            pelotaAux.GetComponent<Pelota>().LaunchBall(dir);
+            nuevaPelota.LaunchBall(transform.position, dir);
 
+            numBolasEnSpawner--;
 
             yield return null;
         }
 
       
-        numBolasPorLLegar = numBolasSpawner;
-        yield return new WaitForSeconds(1);
-        spawnerState = SpawnerState.Espera;
+
         
         yield break;    //Stop coroutine
     }

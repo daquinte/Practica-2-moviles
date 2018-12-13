@@ -20,12 +20,17 @@ public class Pelota : MonoBehaviour {
         Physics2D.IgnoreLayerCollision(9, 9);         //Hace que las pelotas se ignoren (Todas están en layer 9)
     }
 
-    public void LaunchBall(Vector2 dir)
+    public void LaunchBall(Vector3 pos, Vector2 dir)
     {
+        transform.position = pos;
         GetComponent<Rigidbody2D>().velocity = dir * velocidad * Time.deltaTime;
+
+        //Añadimos la pelota
+        
+        LevelManager.instance.SumaPelota(this);
     }
 
-    public void SetVueltaACasa(GameManager.LLegadaPelota callback = null)
+    public void SetVueltaACasa(LevelManager.LLegadaPelota callback = null)
     {
         vueltaACasa = true;
      
@@ -35,7 +40,7 @@ public class Pelota : MonoBehaviour {
         StartCoroutine(VueltaACasa(callback));
     }
 
-    private IEnumerator VueltaACasa(GameManager.LLegadaPelota callback = null)
+    private IEnumerator VueltaACasa(LevelManager.LLegadaPelota callback = null)
     {
         while (vueltaACasa)
         {

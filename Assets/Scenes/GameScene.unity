@@ -591,9 +591,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6ee474e01fdb4944aaead743b2399dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PelotaPrefab: {fileID: 114240080353485636, guid: 86acbbc54f7fe794da9323b8478ec3e3,
+    type: 2}
+  vueltaCasa: {fileID: 44502935}
   spawner: {fileID: 972327064}
   deathZone: {fileID: 1531997404}
-  vueltaCasa: {fileID: 0}
 --- !u!1 &307044626
 GameObject:
   m_ObjectHideFlags: 0
@@ -1406,7 +1408,6 @@ GameObject:
   - component: {fileID: 972327063}
   - component: {fileID: 972327062}
   - component: {fileID: 972327064}
-  - component: {fileID: 972327065}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -1467,7 +1468,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 972327061}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.06, y: -4.33, z: 0}
+  m_LocalPosition: {x: -0.09, y: -4.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2023177395}
@@ -1488,31 +1489,6 @@ MonoBehaviour:
   PelotaPrefab: {fileID: 1585775854616638, guid: 86acbbc54f7fe794da9323b8478ec3e3,
     type: 2}
   numBolasSpawner: 10
---- !u!61 &972327065
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 972327061}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.53, y: 0.81}
-    newSize: {x: 0.53, y: 0.81}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.56, y: 0.81}
-  m_EdgeRadius: 0
 --- !u!224 &1103190989 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224564183151079492, guid: 58d59e590c2e3ee4eb6e30270134dfe4,

@@ -21,15 +21,15 @@ public class DeathZone : MonoBehaviour {
             {
                 llegadaPrimeraPelota = true;
 
-                //avisa al gameManager de la siguiente posicion
+                //avisa al LevelManager de la siguiente posicion
                 float spawnerX = collision.gameObject.transform.position.x;
-                GameManager.instance.SetSpawnerPosition(spawnerX);
+                LevelManager.instance.SetSpawnerPosition(spawnerX);
             }
 
-            //Notificamos al gameManager de que ha caido una bola 
+            //Notificamos al LevelManager de que ha caido una bola 
             //y le decimos que vaya al spawner
 
-            collision.gameObject.GetComponent<Pelota>().SetVueltaACasa(GameManager.instance.llegada);
+            collision.gameObject.GetComponent<Pelota>().SetVueltaACasa(LevelManager.instance.llegada);
         }
     }
 
