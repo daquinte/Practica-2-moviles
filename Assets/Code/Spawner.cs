@@ -6,6 +6,7 @@ using UnityEngine;
 
 
 public class Spawner : MonoBehaviour {
+
     #region Attributes
     public GameObject PelotaPrefab;
 
@@ -26,29 +27,6 @@ public class Spawner : MonoBehaviour {
         numBolasEnSpawner = numBolasASpawnear - LevelManager.instance.getBolasAct();
         textoPelotas.text = (numBolasEnSpawner).ToString();
     }
-
-    /*
-    private void OnTriggerEnter2D (Collider2D collision)
-    {
-        if(spawnerState == SpawnerState.Espera
-            && collision.gameObject.tag == "Bola")
-        {
-            
-            Destroy(collision.gameObject);
-            numBolasPorLLegar--;
-
-
-            if(numBolasPorLLegar <= 0)
-            {
-                //Actualizo posicion spawner (actualizada en la primera bola)
-                transform.position = LevelManager.instance.GetSpawnerPosition();
-
-                //Preparamos la nueva ronda de juego
-                spawnerState = SpawnerState.Lanzamiento;
-                LevelManager.instance.PreparaSiguienteGameRound();
-            }
-        }
-    }*/
 
      public void ActualizaPosicionSpawner(Vector3 nuevaPos)
     {
@@ -79,9 +57,6 @@ public class Spawner : MonoBehaviour {
 
             yield return null;
         }
-
-      
-
         
         yield break;    //Stop coroutine
     }

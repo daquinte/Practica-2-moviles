@@ -2,14 +2,15 @@
 using UnityEditor;
 using System.IO;
 
-//¿Streamreader o textAsset? Cual es mejor para Android???
+//¿Streamreader o textAsset? Cual es mejor para Android?
 public class LectorTXT : MonoBehaviour
 {
     public GameObject bloquePrefab1;
     //...y los demás tipos
 
-    int[,] matrizTipo = new int [11,11];
-    int[,] matrizVida = new int[11, 11];
+    int[,] MatrizTipo = new int [11,11];
+    int[,] MatrizVida = new int[11, 11];
+    int contadorLayer;
     /*
      * ESTO NOS VA A SERVIR PARA LO DE LEER PROGRESO
     static void WriteString()
@@ -30,14 +31,31 @@ public class LectorTXT : MonoBehaviour
     }*/
 
 
-    public void ReadMap(string mapPath)
+     /*Este método recibe un numero de nivel
+       Y en base a eso se apaña la ruta, interpreta el nivel y lo genera
+         */
+    public void loadLevel(int level)
     {
-        string path = "Assets/Maps/mapdata1.txt";
+        string path = "Assets/Maps/" + "mapdata" + level.ToString() + ".txt";
+       
+        ReadMap(path);
+    }
 
+    private void ReadMap(string mapPath)
+    {
+        Debug.Log("A leer");
         //Read the text from directly from the test.txt file
-        StreamReader reader = new StreamReader(path);
-        Debug.Log(reader.ReadToEnd());
+        StreamReader reader = new StreamReader(mapPath);
+        if (reader != null)
+            Debug.Log("Me he abierto");
         reader.Close();
+    }
+
+
+
+    private void LeeMapaEInterpreta(TextAsset textAsset)
+    {
+       
     }
 }
     

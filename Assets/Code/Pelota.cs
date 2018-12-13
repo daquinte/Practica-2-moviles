@@ -30,24 +30,38 @@ public class Pelota : MonoBehaviour {
         LevelManager.instance.SumaPelota(this);
     }
 
-    public void SetVueltaACasa(LevelManager.LLegadaPelota callback = null)
+    /// <summary>
+    /// Detiene la pelota y la lleva a la posición de origen en la que estaba cuando se
+    /// activó el componente. El desplazamiento lo hace durante time segundos.
+    /// Cuando llega se destruye.
+    /// </summary>
+    /// <param name="time">Tiempo que tarda en llegar</param>
+    /// <param name="callback">Función callback</param>
+    public void GoToSpawner(float time, System.Action<Pelota> callback)
     {
         vueltaACasa = true;
      
         
         GetComponent<CircleCollider2D>().isTrigger = true; //Ignora colisiones con los bloques
         GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-        StartCoroutine(VueltaACasa(callback));
+
+        StartCoroutine(GoTo(time, callback));
     }
 
-    private IEnumerator VueltaACasa(LevelManager.LLegadaPelota callback = null)
+    private IEnumerator GoTo(float time, System.Action<Pelota> callback)
     {
         while (vueltaACasa)
         {
-            transform.position = Vector3.MoveTowards(transform.position, posicionOriginal, 10.0f * Time.deltaTime);
+            time *= Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, posicionOriginal, time);
             if (transform.position == posicionOriginal) {
                 vueltaACasa = false;
-                callback.Invoke();
+
+
+                if (callback != null)
+                    callback(this);
+              
+
                 Destroy(gameObject);
 
             }

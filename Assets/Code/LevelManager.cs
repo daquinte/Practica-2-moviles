@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+[RequireComponent(typeof(LectorTXT))]
 
 public class LevelManager : MonoBehaviour {
 
     #region Attributes
+
     int numMaxPelotas;                                      //Numero (máximo actual) de pelotas que va a generar el spawner.
     int numPelotasAct;                                      //Numero de pelotas por el tablero
     public Pelota PelotaPrefab;                             //Prefab de la pelota
@@ -17,16 +18,14 @@ public class LevelManager : MonoBehaviour {
     List <Bloque> bloques;                                  //Bloques
 
     public Spawner spawner;                                 //Spawner del nivel
+    bool llegadaPrimeraPelota;
     Vector3 spawnerPosition;                                //Posicion siguiente/actual del spawner
     bool puedeInstanciar;                                   //Determina si puede generar bolas o no
 
     public DeathZone deathZone;                             //Deathzone del nivel
 
-    #region delegate                                        
-    public delegate void LLegadaPelota();                   //Delegate para la función de recogida de pelotas
-    public LLegadaPelota llegada;
-    #endregion
-
+    
+    LectorTXT lectorNivel;
 
 
     LineRenderer shootLine;                                 //Marca la trayectoria de disparo
@@ -55,16 +54,21 @@ public class LevelManager : MonoBehaviour {
 
     //Use this for init
     void Start() {
+        
+        lectorNivel = GetComponentInChildren<LectorTXT>();
+        lectorNivel.loadLevel(1);
+
         puedeInstanciar = true;
         spawnerPosition = spawner.gameObject.transform.position;
 
         pelotas = new List<Pelota>();
 
-        llegada = RestaPelota;
         shootLine = GetComponentInChildren<LineRenderer>();
       
         numMaxPelotas = 10;         //Valor inicial
         numPelotasAct = 0;
+
+        
     }
 
     // Update is called once per frame
@@ -85,7 +89,7 @@ public class LevelManager : MonoBehaviour {
             shootLine.enabled = false;
             spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
             numPelotasAct = numMaxPelotas;          //Establecemos el nº de pelotas en el tablero
-            Debug.Log(numPelotasAct);
+            
             puedeInstanciar = false;
         }
 
@@ -98,18 +102,16 @@ public class LevelManager : MonoBehaviour {
     {
         foreach (Pelota p in pelotas)
         {
-           p.SetVueltaACasa();
+          // p.SetVueltaACasa();
         }
 
     }
 
-
-
+   
 
     ///Metodo encargado de situar el spawner en la nueva posición,
     ///de bajar todos los muros 1 posicion hacia abajo -> Y comprobar si se ha acabado la partida!
     ///establecer puntos, nuevo numero max de pelotas y de algo más que no recuerdo ahora mismo.
-    // PUBLIC???
     private void PreparaSiguienteGameRound()
     {
         Debug.Log("*PREPARNDO NUEVO GAME ROUND*");
@@ -118,6 +120,7 @@ public class LevelManager : MonoBehaviour {
 
         //ACTUALIZA SPAWNER
         puedeInstanciar = true;
+        llegadaPrimeraPelota = false;
         spawner.ActualizaPosicionSpawner(spawnerPosition);
 
         //ACTUALIZA PUNTOS Y DEMÁS MIERDAS
@@ -125,9 +128,27 @@ public class LevelManager : MonoBehaviour {
         //numMaxPelotas += 10;    
     }
 
+    /// <summary>
+    /// Determina la posicion nueva del spawner si es la primera bola
+    /// Llama a la bola para avisarla de que modifique su comportamiento
+    /// </summary>
+    /// <param name="pelota">Pelota del deathzone</param>
+    public void LlegadaPelota(Pelota pelota)
+    {
 
+        if (!llegadaPrimeraPelota)
+        {
+            llegadaPrimeraPelota = true;
+            spawnerPosition.x = pelota.gameObject.transform.position.x;
+            spawner.ActualizaPosicionSpawner(spawnerPosition);
+            
+        }
 
-//Métodos de la pelota para la gestion de nivel
+        pelota.GoToSpawner(10, RestaPelota);
+
+    }
+
+    //Métodos de la pelota para la gestion de nivel
     #region Methods Pelota
 
     public void SumaPelota(Pelota nuevaPelota)
@@ -137,15 +158,18 @@ public class LevelManager : MonoBehaviour {
 
     //GM es notificado de que ha llegado una pelota
     //Si es la ultima, reset del bool de posicion del Spawner
-    public void RestaPelota()
+    public void RestaPelota(Pelota pelotaQuitada)
     {
         //La sacamos de la lista
         numPelotasAct--;
 
+        pelotas.Remove(pelotaQuitada);
+
+        Destroy(pelotaQuitada.gameObject); //¿Va aqui?
+
         if (numPelotasAct <= 0) //Si han llegado todas las pelotas
         {
             PreparaSiguienteGameRound();
-            deathZone.ResetPrimeraPelota();
         }
     }
 
@@ -154,14 +178,6 @@ public class LevelManager : MonoBehaviour {
 
     //Métodos del spawner para la gestion de nivel
     #region Spawner Methods
-    public void SetSpawnerPosition(float newX)
-    {
-        spawnerPosition.x = newX;     //Guardamos la nueva posicion
-    }
-    public Vector3 GetSpawnerPosition()
-    {
-        return spawnerPosition;
-    }
 
     public int getBolasAct()
     {
@@ -172,5 +188,3 @@ public class LevelManager : MonoBehaviour {
 
 
 }
-
-//TODO: Revisar si se restan y se suman las pelotas en el levelManager -> ¿El delegate funciona?
