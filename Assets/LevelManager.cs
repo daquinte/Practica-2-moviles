@@ -60,7 +60,7 @@ public class LevelManager : MonoBehaviour {
 
         pelotas = new List<Pelota>();
 
-        llegada = new LLegadaPelota(RestaPelota);
+        llegada = RestaPelota;
         shootLine = GetComponentInChildren<LineRenderer>();
       
         numMaxPelotas = 10;         //Valor inicial
@@ -85,6 +85,7 @@ public class LevelManager : MonoBehaviour {
             shootLine.enabled = false;
             spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
             numPelotasAct = numMaxPelotas;          //Establecemos el nº de pelotas en el tablero
+            Debug.Log(numPelotasAct);
             puedeInstanciar = false;
         }
 
@@ -132,13 +133,13 @@ public class LevelManager : MonoBehaviour {
     public void SumaPelota(Pelota nuevaPelota)
     {
         pelotas.Add(nuevaPelota);
-        numPelotasAct++;
     }
 
     //GM es notificado de que ha llegado una pelota
     //Si es la ultima, reset del bool de posicion del Spawner
     public void RestaPelota()
     {
+        //La sacamos de la lista
         numPelotasAct--;
 
         if (numPelotasAct <= 0) //Si han llegado todas las pelotas

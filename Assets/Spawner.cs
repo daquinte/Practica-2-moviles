@@ -23,7 +23,7 @@ public class Spawner : MonoBehaviour {
 
     private void Update()
     {
-        
+        numBolasEnSpawner = numBolasASpawnear - LevelManager.instance.getBolasAct();
         textoPelotas.text = (numBolasEnSpawner).ToString();
     }
 
