@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
 public class GameManager : MonoBehaviour {
 
     #region Attributes
@@ -13,12 +15,14 @@ public class GameManager : MonoBehaviour {
     Vector3 spawnerPosition;
 
     public DeathZone deathZone;
+    public delegate void LLegadaPelota();
+    public LLegadaPelota llegada;
     bool puedeInstanciar;
 
     LineRenderer shootLine;
 
     public Button vueltaCasa;
-    GameObject [] pelotas;
+    GameObject[] pelotas;
     int contador = 0;
 
     #endregion
@@ -31,7 +35,7 @@ public class GameManager : MonoBehaviour {
     {
         //Check if instance already exists
         if (instance == null)
-                instance = this;
+            instance = this;
 
         //If instance already exists and it's not this:
         else if (instance != this)
@@ -43,15 +47,17 @@ public class GameManager : MonoBehaviour {
     #endregion
 
     //Use this for init
-    void Start () {
+    void Start() {
         puedeInstanciar = true;
         spawnerPosition = spawner.gameObject.transform.position;
+        llegada = new LLegadaPelota(RestaPelota);
         shootLine = GetComponentInChildren<LineRenderer>();
+      
         numMaxPelotas = 10;         //Valor inicial
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+    }
+
+    // Update is called once per frame
+    void FixedUpdate() {
 
         //ACTUALIZA TEXTO PUNTOS BLA BLA BLA
 
@@ -70,9 +76,11 @@ public class GameManager : MonoBehaviour {
             numPelotasAct = numMaxPelotas;          //Establecemos el nº de pelotas en el tablero
             puedeInstanciar = false;
         }
-    
+
     }
 
+   
+  
 
     public void Recogida()
     {
@@ -85,7 +93,7 @@ public class GameManager : MonoBehaviour {
 
     }
 
- 
+
 
 
     ///Metodo encargado de situar el spawner en la nueva posición,
@@ -106,13 +114,13 @@ public class GameManager : MonoBehaviour {
 
     //GM es notificado de que ha llegado una pelota
     //Si es la ultima, reset del bool de posicion del Spawner
-    public void LlegadaPelota()
+    public void RestaPelota()
     {
         numPelotasAct--;
 
         if (numPelotasAct <= 0) //Si han llegado todas las pelotas
         {
-            deathZone.ResetPrimeraPelota(); 
+            deathZone.ResetPrimeraPelota();
         }
     }
 
@@ -124,4 +132,5 @@ public class GameManager : MonoBehaviour {
     {
         return spawnerPosition;
     }
+
 }

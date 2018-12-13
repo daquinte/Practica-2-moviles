@@ -79,7 +79,7 @@ public class Spawner : MonoBehaviour {
         numBolasPorLLegar = numBolasSpawner;
         yield return new WaitForSeconds(1);
         spawnerState = SpawnerState.Espera;
-        Debug.Log(spawnerState);
+        
         yield break;    //Stop coroutine
     }
 }
