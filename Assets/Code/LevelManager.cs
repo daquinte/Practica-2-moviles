@@ -56,7 +56,7 @@ public class LevelManager : MonoBehaviour {
     void Start() {
         
         lectorNivel = GetComponentInChildren<LectorTXT>();
-        lectorNivel.loadLevel(1);
+        lectorNivel.LoadLevel(1);
 
         puedeInstanciar = true;
         spawnerPosition = spawner.gameObject.transform.position;
@@ -87,31 +87,19 @@ public class LevelManager : MonoBehaviour {
         if (Input.GetMouseButtonUp(0) && puedeInstanciar)
         {
             shootLine.enabled = false;
-            spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
             numPelotasAct = numMaxPelotas;          //Establecemos el nº de pelotas en el tablero
-            
+            spawner.GeneraPelotas(numPelotasAct, PelotaPrefab);
+       
             puedeInstanciar = false;
         }
 
     }
 
-   
-  
-
-    public void Recogida()
-    {
-        foreach (Pelota p in pelotas)
-        {
-          // p.SetVueltaACasa();
-        }
-
-    }
-
-   
-
+    /// <summary>
     ///Metodo encargado de situar el spawner en la nueva posición,
     ///de bajar todos los muros 1 posicion hacia abajo -> Y comprobar si se ha acabado la partida!
     ///establecer puntos, nuevo numero max de pelotas y de algo más que no recuerdo ahora mismo.
+    /// </summary>
     private void PreparaSiguienteGameRound()
     {
         Debug.Log("*PREPARNDO NUEVO GAME ROUND*");
@@ -121,7 +109,6 @@ public class LevelManager : MonoBehaviour {
         //ACTUALIZA SPAWNER
         puedeInstanciar = true;
         llegadaPrimeraPelota = false;
-        spawner.ActualizaPosicionSpawner(spawnerPosition);
 
         //ACTUALIZA PUNTOS Y DEMÁS MIERDAS
         numPelotasAct = 0;
@@ -148,6 +135,19 @@ public class LevelManager : MonoBehaviour {
 
     }
 
+
+
+
+
+    public void Recogida()
+    {
+        foreach (Pelota p in pelotas)
+        {
+            // p.SetVueltaACasa();
+        }
+
+    }
+
     //Métodos de la pelota para la gestion de nivel
     #region Methods Pelota
 
@@ -164,8 +164,8 @@ public class LevelManager : MonoBehaviour {
         numPelotasAct--;
 
         pelotas.Remove(pelotaQuitada);
-
-        Destroy(pelotaQuitada.gameObject); //¿Va aqui?
+        
+        Destroy(pelotaQuitada.gameObject);
 
         if (numPelotasAct <= 0) //Si han llegado todas las pelotas
         {
@@ -179,9 +179,14 @@ public class LevelManager : MonoBehaviour {
     //Métodos del spawner para la gestion de nivel
     #region Spawner Methods
 
-    public int getBolasAct()
+    public int GetBolasAct()
     {
         return numPelotasAct;
+    }
+
+    public Vector3 GetSpawnerPosition()
+    {
+        return spawner.gameObject.transform.position;
     }
 #endregion
 

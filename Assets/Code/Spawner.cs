@@ -10,11 +10,8 @@ public class Spawner : MonoBehaviour {
     #region Attributes
     public GameObject PelotaPrefab;
 
-    TextMesh textoPelotas;
-
-
-    int numBolasASpawnear;
-    int numBolasEnSpawner;
+    TextMesh textoPelotas;                  //Texto del Spawner
+    int numPelotasSpawner;                  //Nº de Pelotas almacenadas en el Spawner
     #endregion
 
     // Use this for initialization
@@ -22,38 +19,42 @@ public class Spawner : MonoBehaviour {
         textoPelotas = GetComponentInChildren<TextMesh>();
     }
 
-    private void Update()
+    void Update()
     {
-        numBolasEnSpawner = numBolasASpawnear - LevelManager.instance.getBolasAct();
-        textoPelotas.text = (numBolasEnSpawner).ToString();
+        textoPelotas.text = (numPelotasSpawner).ToString();
     }
 
+    //Método para modificar su posición cuando se lo indique LevelManager
      public void ActualizaPosicionSpawner(Vector3 nuevaPos)
     {
         transform.position = nuevaPos;
     }
 
-    public void GeneraPelotas(int numMaxPelotasAct, Pelota p)
+    /// <summary>
+    /// Genera numPelotas instancias del prefab de Pelota que recibe,
+    /// Mediante una coroutina que las instancia.
+    /// </summary>
+    /// <param name="numPelotas">Numero de pelotas que tiene que generar</param>
+    /// <param name="p">PRefab de pelota</param>
+    public void GeneraPelotas(int numPelotas, Pelota p)
     {
-        numBolasASpawnear = numMaxPelotasAct;
-        numBolasEnSpawner = numMaxPelotasAct;
-        StartCoroutine(InstanciaPelota(p));
+        numPelotasSpawner = numPelotas;
+        StartCoroutine(InstanciaPelota(numPelotas, p));
     }
 
-    IEnumerator InstanciaPelota(Pelota pelotaPrefab)
+    IEnumerator InstanciaPelota(int numPelotas, Pelota pelotaPrefab)
     {
-        for (int i = 0; i < numBolasASpawnear; i++)
+        for (int i = 0; i < numPelotas; i++)
         {
             Pelota nuevaPelota = Instantiate(pelotaPrefab);
 
             Vector3 mousePos = Input.mousePosition;
             Vector2 targetPos = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y));
-
             Vector2 dir = (targetPos - new Vector2(transform.position.x, transform.position.y)).normalized;
 
             nuevaPelota.LaunchBall(transform.position, dir);
 
-            numBolasEnSpawner--;
+            numPelotasSpawner--;
 
             yield return null;
         }

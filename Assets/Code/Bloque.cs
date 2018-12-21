@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class Bloque : MonoBehaviour {
 
-    public int vida;
+    int vida;
     TextMesh tm;
 
     // Use this for initialization
     void Start () {
         tm = GetComponentInChildren<TextMesh>();
-        tm.text = vida.ToString();
 	}
 	
 	// Update is called once per frame
@@ -31,5 +30,14 @@ public class Bloque : MonoBehaviour {
                 Destroy(gameObject);
             }
         }
+    }
+
+    public void CreaBloque(int x, int y, int vida)
+    {
+        Vector3 posicion = new Vector3(x, y, 0);
+        this.vida = vida;
+
+        transform.position = posicion;
+
     }
 }
