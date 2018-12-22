@@ -24,8 +24,8 @@ public class Bloque : MonoBehaviour {
             vida--;
             
             if (vida == 0) {
-                
-                Destroy(gameObject);
+
+                LevelManager.instance.RestaBloque(this);
             }
         }
     }

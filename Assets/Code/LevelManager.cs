@@ -5,17 +5,22 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(LectorTXT))]
 
-public class LevelManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour
+{
 
     #region Attributes
+
+    //ATRIBUTOS DE LEVELMANAGER
+    LectorTXT lectorNivel;
+    bool gameOver;
 
     int numMaxPelotas;                                      //Numero (máximo actual) de pelotas que va a generar el spawner.
     int numPelotasAct;                                      //Numero de pelotas por el tablero
     public Pelota PelotaPrefab;                             //Prefab de la pelota
-    List <Pelota> ListaPelotas;                             //Array de pelotas
+    List<Pelota> ListaPelotas;                             //Array de pelotas
     public Button vueltaCasa;                               //Boton de vuelta a casa
 
-    List<Bloque> ListaBloques;                              //Lista de Bloques
+    List<Bloque> ListaBloques;                          //Lista de Bloques
     public Bloque Bloque_1;                                 //Prefab del Bloque 1
 
     public Spawner spawner;                                 //Spawner del nivel
@@ -24,9 +29,9 @@ public class LevelManager : MonoBehaviour {
     bool puedeInstanciar;                                   //Determina si puede generar bolas o no
 
     public DeathZone deathZone;                             //Deathzone del nivel
+    public GameObject warning;                              //Warning de que estás a punto de morir
 
-    
-    LectorTXT lectorNivel;
+
 
 
     LineRenderer shootLine;                                 //Marca la trayectoria de disparo
@@ -54,47 +59,50 @@ public class LevelManager : MonoBehaviour {
     #endregion
 
     //Use this for init
-    void Start() {
-        
+    void Start()
+    {
+        gameOver = false;
+
         lectorNivel = GetComponentInChildren<LectorTXT>();
-        lectorNivel.LoadLevel(2);
+        lectorNivel.LoadLevel(1);
 
         puedeInstanciar = true;
         spawnerPosition = spawner.gameObject.transform.position;
 
         ListaPelotas = new List<Pelota>();
-        ListaBloques = new List<Bloque>();
 
         shootLine = GetComponentInChildren<LineRenderer>();
-      
+
         numMaxPelotas = 10;         //Valor inicial
         numPelotasAct = 0;
 
-        
+
     }
 
     // Update is called once per frame
-    void FixedUpdate() {
-
-        //ACTUALIZA TEXTO PUNTOS BLA BLA BLA
-
-
-        //INPUT
-
-        if (Input.GetMouseButtonDown(0) && puedeInstanciar)
+    void FixedUpdate()
+    {
+        if (!gameOver)
         {
-            shootLine.enabled = true;
-        }
+            //ACTUALIZA TEXTO PUNTOS BLA BLA BLA
 
-        if (Input.GetMouseButtonUp(0) && puedeInstanciar)
-        {
-            shootLine.enabled = false;
-            numPelotasAct = numMaxPelotas;          //Establecemos el nº de pelotas en el tablero
-            spawner.GeneraPelotas(numPelotasAct, PelotaPrefab);
-       
-            puedeInstanciar = false;
-        }
 
+            //INPUT
+
+            if (Input.GetMouseButtonDown(0) && puedeInstanciar)
+            {
+                shootLine.enabled = true;
+            }
+
+            if (Input.GetMouseButtonUp(0) && puedeInstanciar)
+            {
+                shootLine.enabled = false;
+                numPelotasAct = numMaxPelotas;          //Establecemos el nº de pelotas en el tablero
+                spawner.GeneraPelotas(numPelotasAct, PelotaPrefab);
+
+                puedeInstanciar = false;
+            }
+        }
     }
 
     /// <summary>
@@ -106,7 +114,23 @@ public class LevelManager : MonoBehaviour {
     {
         Debug.Log("*PREPARNDO NUEVO GAME ROUND*");
 
-        //REVISA SI HAS MUERTO
+        int it = 0;
+        while (!gameOver && it < ListaBloques.Count)
+        {
+            ListaBloques[it].transform.position -= new Vector3(0, 1, 0);
+
+            if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 1)
+            {
+                gameOver = true;
+            }
+            //Si algún bloque está lo suficientemente cerca del Spawner activamos el warning
+            else if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 4 && !warning.activeSelf)
+            {
+                warning.SetActive(true);
+            }
+
+            it++;
+        }
 
         //ACTUALIZA SPAWNER
         puedeInstanciar = true;
@@ -130,7 +154,7 @@ public class LevelManager : MonoBehaviour {
             llegadaPrimeraPelota = true;
             spawnerPosition.x = pelota.gameObject.transform.position.x;
             spawner.ActualizaPosicionSpawner(spawnerPosition);
-            
+
         }
 
         pelota.GoToSpawner(10, RestaPelota);
@@ -161,7 +185,10 @@ public class LevelManager : MonoBehaviour {
     /// <param name="vida">Vida del bloque</param>
     public void CreaBloque(int x, int y, int tipo, int vida)
     {
-
+        if (ListaBloques == null)
+        {
+            ListaBloques = new List<Bloque>();
+        }
         switch (tipo)
         {
 
@@ -169,18 +196,27 @@ public class LevelManager : MonoBehaviour {
                 Debug.Log("No debería haber un tipo 0 crack");
                 break;
             case 1:
-   
+
                 Bloque bloque = Instantiate(Bloque_1);
                 bloque.ConfiguraBloque(x, y, vida);
-                //ListaBloques.Add(bloque);
-            break;
+                ListaBloques.Add(bloque);
+                break;
 
             default:
                 Debug.Log("El tipo no está bien para el testing");
-            break;
+                break;
         }
 
-     
+
+    }
+
+    public void RestaBloque(Bloque bloqueQuitado)
+    {
+        ListaBloques.Remove(bloqueQuitado);
+
+        Destroy(bloqueQuitado.gameObject);
+
+        //A sumar puntos o lo que sea
     }
     #endregion
 
@@ -192,6 +228,8 @@ public class LevelManager : MonoBehaviour {
         ListaPelotas.Add(nuevaPelota);
     }
 
+
+
     //GM es notificado de que ha llegado una pelota
     //Si es la ultima, reset del bool de posicion del Spawner
     public void RestaPelota(Pelota pelotaQuitada)
@@ -200,7 +238,7 @@ public class LevelManager : MonoBehaviour {
         numPelotasAct--;
 
         ListaPelotas.Remove(pelotaQuitada);
-        
+
         Destroy(pelotaQuitada.gameObject);
 
         spawner.SumaContadorSpawner();
@@ -226,7 +264,7 @@ public class LevelManager : MonoBehaviour {
     {
         return spawner.gameObject.transform.position;
     }
-#endregion
+    #endregion
 
 
 

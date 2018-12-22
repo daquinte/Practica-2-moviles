@@ -63,7 +63,7 @@ public class LectorTXT : MonoBehaviour
                         {
                             //Has llegado al final del layer
                             layer++;
-                            Debug.Log("Estoy en el layer " + layer);
+                           
                             lineaDesdeLaQueIgnoramos = filaTxt;
                             IgnoreReading = true;
                         }
@@ -72,7 +72,7 @@ public class LectorTXT : MonoBehaviour
 
                     else if (IgnoreReading && filaTxt == lineaDesdeLaQueIgnoramos + 2)
                     {
-                        Debug.Log("Ignoradas 2 lineas con exito");
+                        
                         IgnoreReading = false;  //Leemos la zona de numeros
                         lineaDesdeLaQueIgnoramos = 0;
                     }
@@ -91,7 +91,7 @@ public class LectorTXT : MonoBehaviour
                             //Si estás en el layer 1, guardas la posicion logica y los tipos
                             if (layer == 1)
                             {
-                                Debug.Log(-(filaTxt - 3));
+
                                 InfoBloque aux = new InfoBloque
                                 {
                                     X = i,
