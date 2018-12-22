@@ -7,23 +7,25 @@ using System.Collections.Generic;
 //¿Streamreader o textAsset? Cual es mejor para Android?
 public class LectorTXT : MonoBehaviour
 {
-    public GameObject bloquePrefab1;
-    //...y los demás tipos
 
-    struct InfoBloque
+    public struct InfoBloque
     {
-        int x, y;
-        int tipo;
-        int vida;
+      
+       public int X { get; set; }
+       public int Y { get; set; }
+       public int Tipo { get; set; }
+       public int Vida { get; set; }
+        
     }
 
-    List <Bloque>     listaBloques;
-    List <InfoBloque> listaInfo;
-    char[] caracteresDelimitadores = { ',', '=', '.' };
+    List <InfoBloque> listaInfo = new List<InfoBloque>();
+    char[] caracteresDelimitadores = { ',', '.' };
     
 
     /// <summary>
     /// Carga el nivel "level" de su txt correspondiente
+    /// Recorre el txt por layers, cuando encuentra uno ignora dos líneas 
+    /// y entonces procesa la informacion, que guarda en el struct de properties de Bloque
     /// </summary>
     /// <param name="level"></param>
     public void LoadLevel(int level)
@@ -80,10 +82,30 @@ public class LectorTXT : MonoBehaviour
                         for (int i = 0; i < entries.Length - 1; i++)
                         {
 
-                            //Si estás en el layer 1, guardas los tipos
+                            //Si estás en el layer 1, guardas la posicion logica y los tipos
+                            if (layer == 1)
+                            {
+                                InfoBloque aux = new InfoBloque();
+                                aux.X = filaTxt;
+                                aux.Y = i;
+                                aux.Tipo = int.Parse(entries[i]);
 
+                                listaInfo.Add(aux);
+                            }
 
-                            //Si estás en el layer 2, guardas la vida
+                            //Si estás en el layer 2, guardas la vida, interpretas la posicion x e y a coordenadas de mundo
+                            //Y lo creas, sacandolo de la lista de informacion
+                            else if (layer == 2)
+                            {
+                                InfoBloque aux2 = listaInfo[i];
+                                aux2.Vida = int.Parse(entries[i]);
+
+                                GetComponent<LevelManager>().CreaBloque(aux2.X, aux2.Y, aux2.Tipo, aux2.Vida);
+
+                                listaInfo.RemoveAt(i);
+                            }
+
+                            else Debug.Log("ERROR CATASTROFICO: Se esperaba layer entre 1 y 2");
 
                         }
                     }

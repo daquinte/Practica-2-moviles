@@ -32,7 +32,7 @@ public class Bloque : MonoBehaviour {
         }
     }
 
-    public void CreaBloque(int x, int y, int vida)
+    public void ConfiguraBloque(int x, int y, int vida)
     {
         Vector3 posicion = new Vector3(x, y, 0);
         this.vida = vida;
