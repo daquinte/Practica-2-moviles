@@ -57,7 +57,7 @@ public class LevelManager : MonoBehaviour {
     void Start() {
         
         lectorNivel = GetComponentInChildren<LectorTXT>();
-        lectorNivel.LoadLevel(1);
+        lectorNivel.LoadLevel(2);
 
         puedeInstanciar = true;
         spawnerPosition = spawner.gameObject.transform.position;

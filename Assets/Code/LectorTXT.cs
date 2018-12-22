@@ -82,7 +82,7 @@ public class LectorTXT : MonoBehaviour
 
                         //Separamos el line en argumentos.
                         string[] entries = line.Split(caracteresDelimitadores);
-                        Debug.Log(line);
+                        //Debug.Log(line);
                         //Leemos e interpretamos lo que hemos leido
                         //Rcuerda que filaTxt = fila e i = columna
                         for (int i = 0; i < entries.Length - 1; i++)
@@ -91,15 +91,15 @@ public class LectorTXT : MonoBehaviour
                             //Si estás en el layer 1, guardas la posicion logica y los tipos
                             if (layer == 1)
                             {
-                               
+                                Debug.Log(-(filaTxt - 3));
                                 InfoBloque aux = new InfoBloque
                                 {
                                     X = i,
-                                    Y = -j,
+                                    Y = j,
                                     Tipo = int.Parse(entries[i]),
                                     Vida = 0
                                 };
-                                Debug.Log("j; " + j);
+                                
                                 listaInfo.Add(aux);
                             }
 
@@ -109,8 +109,9 @@ public class LectorTXT : MonoBehaviour
                             {
                                 InfoBloque aux2 = listaInfo[i];
                                 aux2.Vida = int.Parse(entries[i]);
+                                aux2.X = i;
+                                aux2.Y = -j; //??????????????????????????????
 
-                               
                                 if(aux2.Vida != 0) {
                                     Debug.Log("Voy a crear un bloque");
                                     GetComponent<LevelManager>().CreaBloque(aux2.X, aux2.Y, aux2.Tipo, aux2.Vida);
@@ -120,13 +121,15 @@ public class LectorTXT : MonoBehaviour
                             else Debug.Log("ERROR CATASTROFICO: Se esperaba layer entre 1 y 2");
 
                         }
-
-                        j++;    //Sumamos la fila de la matriz numerica
-                       
+                        //Debug.Log("j; " + j);
+                        if(layer == 2) { 
+                            j++;    //Sumamos la fila de la matriz numerica
+                        }
                     }
 
                     //En cualquier caso, aumento el contador de fila leida;
                     filaTxt++;
+                    
                 }
 
              
