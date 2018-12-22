@@ -17,6 +17,7 @@ public class Spawner : MonoBehaviour {
     // Use this for initialization
     void Start () {
         textoPelotas = GetComponentInChildren<TextMesh>();
+        numPelotasSpawner = 10;
     }
 
     void Update()
@@ -28,6 +29,13 @@ public class Spawner : MonoBehaviour {
      public void ActualizaPosicionSpawner(Vector3 nuevaPos)
     {
         transform.position = nuevaPos;
+        
+        //Reactivar el texto y empezar a contar las pelotas que han llegado
+    }
+
+    public void SumaContadorSpawner()
+    {
+        numPelotasSpawner++;
     }
 
     /// <summary>
@@ -38,6 +46,7 @@ public class Spawner : MonoBehaviour {
     /// <param name="p">PRefab de pelota</param>
     public void GeneraPelotas(int numPelotas, Pelota p)
     {
+        //Desactivar el texto
         numPelotasSpawner = numPelotas;
         StartCoroutine(InstanciaPelota(numPelotas, p));
     }

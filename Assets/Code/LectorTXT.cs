@@ -19,7 +19,7 @@ public class LectorTXT : MonoBehaviour
     }
 
     List <InfoBloque> listaInfo = new List<InfoBloque>();
-    char[] caracteresDelimitadores = { ',', '.' };
+    char[] caracteresDelimitadores = { ',','.' };
     
 
     /// <summary>
@@ -27,16 +27,18 @@ public class LectorTXT : MonoBehaviour
     /// Recorre el txt por layers, cuando encuentra uno ignora dos líneas 
     /// y entonces procesa la informacion, que guarda en el struct de properties de Bloque
     /// </summary>
-    /// <param name="level"></param>
+    /// <param name="level">Nivel a cargar</param>
     public void LoadLevel(int level)
     {
         try { 
          
             string path = "Assets/Maps/" + "mapdata" + level.ToString() + ".txt";
+            Debug.Log(path);
           
             //Read the text from directly from the test.txt file
             StreamReader reader = new StreamReader(path);
 
+            if (reader != null) Debug.Log(reader + " abierto con exito");
 
             // You generally use the "using" statement for potentially memory-intensive objects
             // instead of relying on garbage collection.
@@ -44,6 +46,7 @@ public class LectorTXT : MonoBehaviour
             {
                 string line;        //Linea leida
                 int filaTxt = 0;    //Fila del archivo que estamos leyendo
+                int j = 0;          //Fila de la zona numerica del txt
                 int layer = 0;      //Itera sobre los layers. 1 = tipo 2 = vida.
 
                 //IGNORE
@@ -53,12 +56,14 @@ public class LectorTXT : MonoBehaviour
 
                 while ((line = reader.ReadLine()) != null) {
 
-                    if (line == "[Layer]")
+                   
+                    if (line == "[layer]")
                     {
                         if (!IgnoreReading)
                         {
                             //Has llegado al final del layer
                             layer++;
+                            Debug.Log("Estoy en el layer " + layer);
                             lineaDesdeLaQueIgnoramos = filaTxt;
                             IgnoreReading = true;
                         }
@@ -67,16 +72,17 @@ public class LectorTXT : MonoBehaviour
 
                     else if (IgnoreReading && filaTxt == lineaDesdeLaQueIgnoramos + 2)
                     {
+                        Debug.Log("Ignoradas 2 lineas con exito");
                         IgnoreReading = false;  //Leemos la zona de numeros
                         lineaDesdeLaQueIgnoramos = 0;
                     }
 
-                    else
+                    else if (!IgnoreReading)
                     {
 
                         //Separamos el line en argumentos.
                         string[] entries = line.Split(caracteresDelimitadores);
-
+                        Debug.Log(line);
                         //Leemos e interpretamos lo que hemos leido
                         //Rcuerda que filaTxt = fila e i = columna
                         for (int i = 0; i < entries.Length - 1; i++)
@@ -85,11 +91,15 @@ public class LectorTXT : MonoBehaviour
                             //Si estás en el layer 1, guardas la posicion logica y los tipos
                             if (layer == 1)
                             {
-                                InfoBloque aux = new InfoBloque();
-                                aux.X = filaTxt;
-                                aux.Y = i;
-                                aux.Tipo = int.Parse(entries[i]);
-
+                               
+                                InfoBloque aux = new InfoBloque
+                                {
+                                    X = i,
+                                    Y = -j,
+                                    Tipo = int.Parse(entries[i]),
+                                    Vida = 0
+                                };
+                                Debug.Log("j; " + j);
                                 listaInfo.Add(aux);
                             }
 
@@ -100,14 +110,19 @@ public class LectorTXT : MonoBehaviour
                                 InfoBloque aux2 = listaInfo[i];
                                 aux2.Vida = int.Parse(entries[i]);
 
-                                GetComponent<LevelManager>().CreaBloque(aux2.X, aux2.Y, aux2.Tipo, aux2.Vida);
-
-                                listaInfo.RemoveAt(i);
+                               
+                                if(aux2.Vida != 0) {
+                                    Debug.Log("Voy a crear un bloque");
+                                    GetComponent<LevelManager>().CreaBloque(aux2.X, aux2.Y, aux2.Tipo, aux2.Vida);
+                                }
                             }
 
                             else Debug.Log("ERROR CATASTROFICO: Se esperaba layer entre 1 y 2");
 
                         }
+
+                        j++;    //Sumamos la fila de la matriz numerica
+                       
                     }
 
                     //En cualquier caso, aumento el contador de fila leida;
@@ -116,6 +131,7 @@ public class LectorTXT : MonoBehaviour
 
              
             }
+            listaInfo.Clear();
             reader.Close();
         }
 

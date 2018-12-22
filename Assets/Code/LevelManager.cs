@@ -164,12 +164,15 @@ public class LevelManager : MonoBehaviour {
 
         switch (tipo)
         {
-            case 1:
 
-                Debug.Log("HOLA SOY UN BLOQUE Y ME ESTOY CREANDO");
+            case 0:
+                Debug.Log("No debería haber un tipo 0 crack");
+                break;
+            case 1:
+   
                 Bloque bloque = Instantiate(Bloque_1);
                 bloque.ConfiguraBloque(x, y, vida);
-                ListaBloques.Add(bloque.GetComponent<Bloque>());
+                //ListaBloques.Add(bloque);
             break;
 
             default:
@@ -199,6 +202,8 @@ public class LevelManager : MonoBehaviour {
         ListaPelotas.Remove(pelotaQuitada);
         
         Destroy(pelotaQuitada.gameObject);
+
+        spawner.SumaContadorSpawner();
 
         if (numPelotasAct <= 0) //Si han llegado todas las pelotas
         {

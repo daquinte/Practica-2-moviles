@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bloque : MonoBehaviour {
 
@@ -39,5 +37,6 @@ public class Bloque : MonoBehaviour {
 
         transform.position = posicion;
 
+        Debug.Log("Bloque configurado");
     }
 }
