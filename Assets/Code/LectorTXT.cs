@@ -30,13 +30,28 @@ public class LectorTXT : MonoBehaviour
     /// <param name="level">Nivel a cargar</param>
     public void LoadLevel(int level)
     {
-        try { 
-         
-            string path = "Assets/Maps/" + "mapdata" + level.ToString() + ".txt";
-            Debug.Log(path);
-          
+        try {
+            string path;
+            StreamReader reader;
+#if UNITY_ANDROID
+            //Read from the resources file using TextAsset
+           TextAsset pathTextAsset = Resources.Load<TextAsset>("mapdata" + level.ToString());
+            path = pathTextAsset.text;
+
+            byte[] byteArray = System.Text.Encoding.ASCII.GetBytes(path);
+            MemoryStream memoryStream = new MemoryStream(byteArray);
+
+             reader = new StreamReader(memoryStream);
+
+
+#endif
+#if UNITY_EDITOR
             //Read the text from directly from the test.txt file
-            StreamReader reader = new StreamReader(path);
+            path = "Assets/Maps/" + "mapdata" + level.ToString() + ".txt";
+            reader = new StreamReader(path);
+#endif
+
+           
 
             if (reader != null) Debug.Log(reader + " abierto con exito");
 
