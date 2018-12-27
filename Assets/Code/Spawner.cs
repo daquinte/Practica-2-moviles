@@ -17,7 +17,6 @@ public class Spawner : MonoBehaviour {
     // Use this for initialization
     void Start () {
         textoPelotas = GetComponentInChildren<TextMesh>();
-        numPelotasSpawner = 10;
     }
 
     void Update()

@@ -36,7 +36,5 @@ public class Bloque : MonoBehaviour {
         this.vida = vida;
 
         transform.position = posicion;
-
-        Debug.Log("Bloque configurado");
     }
 }

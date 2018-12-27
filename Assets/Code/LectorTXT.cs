@@ -8,17 +8,9 @@ using System.Collections.Generic;
 public class LectorTXT : MonoBehaviour
 {
 
-    public struct InfoBloque
-    {
-      
-       public int X { get; set; }
-       public int Y { get; set; }
-       public int Tipo { get; set; }
-       public int Vida { get; set; }
-        
-    }
 
-    List <InfoBloque> listaInfo = new List<InfoBloque>();
+    //List <InfoBloque> listaInfo = new List<InfoBloque>();
+    List<int> listaInfo = new List<int>();
     char[] caracteresDelimitadores = { ',','.' };
     
 
@@ -33,7 +25,7 @@ public class LectorTXT : MonoBehaviour
         try {
             string path;
             StreamReader reader;
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
             //Read from the resources file using TextAsset
            TextAsset pathTextAsset = Resources.Load<TextAsset>("mapdata" + level.ToString());
             path = pathTextAsset.text;
@@ -63,6 +55,8 @@ public class LectorTXT : MonoBehaviour
                 int filaTxt = 0;    //Fila del archivo que estamos leyendo
                 int j = 0;          //Fila de la zona numerica del txt
                 int layer = 0;      //Itera sobre los layers. 1 = tipo 2 = vida.
+
+                int indiceTipo = 0; //Itera sobre los tipos leidos en layer 1
 
                 //IGNORE
                 bool IgnoreReading = false;
@@ -97,46 +91,38 @@ public class LectorTXT : MonoBehaviour
 
                         //Separamos el line en argumentos.
                         string[] entries = line.Split(caracteresDelimitadores);
-                        //Debug.Log(line);
+                        
                         //Leemos e interpretamos lo que hemos leido
-                        //Rcuerda que filaTxt = fila e i = columna
                         for (int i = 0; i < entries.Length - 1; i++)
                         {
 
-                            //Si estás en el layer 1, guardas la posicion logica y los tipos
+                            //Si estás en el layer 1, guardas los tipos en la lista
                             if (layer == 1)
                             {
+                                int tipoCasilla = int.Parse(entries[i]);
+                                if (tipoCasilla > 0 && tipoCasilla <= 6)
+                                { 
+                                     listaInfo.Add(tipoCasilla);
+                                }
 
-                                InfoBloque aux = new InfoBloque
-                                {
-                                    X = i,
-                                    Y = j,
-                                    Tipo = int.Parse(entries[i]),
-                                    Vida = 0
-                                };
-                                
-                                listaInfo.Add(aux);
+                                else InterpretaBloqueEspecial(tipoCasilla);
                             }
 
                             //Si estás en el layer 2, guardas la vida, interpretas la posicion x e y a coordenadas de mundo
-                            //Y lo creas, sacandolo de la lista de informacion
+                            //Y lo creas, sacando el tipo de la lista de informacion
                             else if (layer == 2)
                             {
-                                InfoBloque aux2 = listaInfo[i];
-                                aux2.Vida = int.Parse(entries[i]);
-                                aux2.X = i;
-                                aux2.Y = -j; //??????????????????????????????
-
-                                if(aux2.Vida != 0) {
-                                    Debug.Log("Voy a crear un bloque");
-                                    GetComponent<LevelManager>().CreaBloque(aux2.X, aux2.Y, aux2.Tipo, aux2.Vida);
+                               
+                                if(int.Parse(entries[i]) != 0) {                                
+                                    GetComponent<LevelManager>().CreaBloque(i,-j, listaInfo[indiceTipo], int.Parse(entries[i]));
+                                    indiceTipo++;
                                 }
                             }
 
                             else Debug.Log("ERROR CATASTROFICO: Se esperaba layer entre 1 y 2");
 
                         }
-                        //Debug.Log("j; " + j);
+                        
                         if(layer == 2) { 
                             j++;    //Sumamos la fila de la matriz numerica
                         }
@@ -149,6 +135,7 @@ public class LectorTXT : MonoBehaviour
 
              
             }
+
             listaInfo.Clear();
             reader.Close();
         }
@@ -159,6 +146,13 @@ public class LectorTXT : MonoBehaviour
         }
     }
 
+
+    private void InterpretaBloqueEspecial(int tipoEspecial) {
+        if (tipoEspecial == 23)
+        {
+            Debug.Log("Procesando un +3 a las bolas");
+        }
+    }
     /*
      * ESTO NOS VA A SERVIR PARA LO DE LEER PROGRESO
     static void WriteString()

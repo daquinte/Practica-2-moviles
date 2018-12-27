@@ -20,8 +20,14 @@ public class LevelManager : MonoBehaviour
     List<Pelota> ListaPelotas;                             //Array de pelotas
     public Button vueltaCasa;                               //Boton de vuelta a casa
 
-    List<Bloque> ListaBloques;                          //Lista de Bloques
-    public Bloque Bloque_1;                                 //Prefab del Bloque 1
+    List<Bloque> ListaBloques;                              //Lista de Bloques
+    public Bloque Bloque_1;                                 //Prefab del bloque 1
+    public Bloque Bloque_2;                                 //Prefab del bloque 2
+    public Bloque Bloque_3;                                 //Prefab del bloque 3
+    public Bloque Bloque_4;                                 //Prefab del bloque 4
+    public Bloque Bloque_5;                                 //Prefab del bloque 5
+    public Bloque Bloque_6;                                 //Prefab del bloque 6
+
 
     public Spawner spawner;                                 //Spawner del nivel
     bool llegadaPrimeraPelota;                              //Bool que determina si ha llegado la primera serpiente
@@ -64,7 +70,7 @@ public class LevelManager : MonoBehaviour
         gameOver = false;
 
         lectorNivel = GetComponentInChildren<LectorTXT>();
-        lectorNivel.LoadLevel(1);
+        lectorNivel.LoadLevel(420);
 
         puedeInstanciar = true;
         spawnerPosition = spawner.gameObject.transform.position;
@@ -162,8 +168,13 @@ public class LevelManager : MonoBehaviour
     }
 
 
-
-
+    /// <summary>
+    /// Suma n pelotas al numero maximo de pelotas que tienes en este nivel
+    /// </summary>
+    /// <param name="n">pelotas a sumar</param>
+    public void SumaPelotasAlNumeroMaximo(int n) {
+        numMaxPelotas += n;
+    }
 
     public void Recogida()
     {
@@ -177,7 +188,7 @@ public class LevelManager : MonoBehaviour
     #region  Methods Bloque
     /// <summary>
     /// Crea una instancia del prefab del Bloque
-    /// Y lo introduce en la lista de Bloques
+    /// según el tipo del mismo y lo introduce en la lista de Bloques
     /// </summary>
     /// <param name="x">Posicion X en el mundo</param>
     /// <param name="y">Posicion Y en el mundo</param>
@@ -189,24 +200,41 @@ public class LevelManager : MonoBehaviour
         {
             ListaBloques = new List<Bloque>();
         }
+
+        Bloque bloque = null;
         switch (tipo)
         {
 
             case 0:
-                Debug.Log("No debería haber un tipo 0 crack");
+                Debug.Log("No debería haber un tipo 0");
                 break;
             case 1:
-
-                Bloque bloque = Instantiate(Bloque_1);
-                bloque.ConfiguraBloque(x, y, vida);
-                ListaBloques.Add(bloque);
+                bloque = Instantiate(Bloque_1); 
+                break;
+            case 2:
+                bloque = Instantiate(Bloque_2);
+                break;
+            case 3:
+                bloque = Instantiate(Bloque_3);
+                break;
+            case 4:
+                bloque = Instantiate(Bloque_4);
+                break;
+            case 5:
+                bloque = Instantiate(Bloque_5);
+                break;
+            case 6:
+                bloque = Instantiate(Bloque_6);
                 break;
 
             default:
-                Debug.Log("El tipo no está bien para el testing");
+                Debug.Log("TIPO NO REGISTRADO. Crea un caso en el switch o revisa el txt dado.");
                 break;
         }
 
+        //Configuramos el bloque y lo metemos en el vector
+        bloque.ConfiguraBloque(x, y, vida);
+        ListaBloques.Add(bloque);
 
     }
 
@@ -253,7 +281,7 @@ public class LevelManager : MonoBehaviour
 
 
     //Métodos del spawner para la gestion de nivel
-    #region Spawner Methods
+    #region Methods Spawner
 
     public int GetBolasAct()
     {
