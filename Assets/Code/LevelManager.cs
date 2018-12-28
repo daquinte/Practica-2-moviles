@@ -28,6 +28,10 @@ public class LevelManager : MonoBehaviour
     public Bloque Bloque_5;                                 //Prefab del bloque 5
     public Bloque Bloque_6;                                 //Prefab del bloque 6
 
+    public GameObject PU_sumaPelotas1;                      //Prefab del powerup
+    public GameObject PU_sumaPelotas2;                      //Prefab del powerup
+    public GameObject PU_sumaPelotas3;                      //Prefab del powerup
+
 
     public Spawner spawner;                                 //Spawner del nivel
     bool llegadaPrimeraPelota;                              //Bool que determina si ha llegado la primera serpiente
@@ -183,6 +187,29 @@ public class LevelManager : MonoBehaviour
             // p.SetVueltaACasa();
         }
 
+    }
+
+    /// <summary>
+    /// Instancia en la escena el power up del tipo dado.
+    /// </summary>
+    /// <param name="tipo">tipo del powerup</param>
+    public void CreaPowerUp(int x, int y, int tipo)
+    {
+        switch (tipo)
+        {
+            case 21:
+                Instantiate(PU_sumaPelotas1, new Vector3(x, y, 0), Quaternion.identity);
+                break;
+            case 22:
+                Instantiate(PU_sumaPelotas2, new Vector3(x, y, 0), Quaternion.identity);
+                break;
+            case 23:
+                Instantiate(PU_sumaPelotas3, new Vector3(x, y, 0), Quaternion.identity);
+                break;
+            default:
+                Debug.Log("tipo no registrado! No se crea nada");
+                break;
+        }
     }
 
     #region  Methods Bloque

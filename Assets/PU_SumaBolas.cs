@@ -2,9 +2,10 @@
 
 public class PU_SumaBolas : MonoBehaviour {
     private int bolasQueSuma;
+
 	// Use this for initialization
 	void Start () {
-        switch (gameObject.name)
+        switch (gameObject.tag)
         {
             case "PowerUp1":
                 bolasQueSuma = 1;
@@ -18,9 +19,11 @@ public class PU_SumaBolas : MonoBehaviour {
             default:
                 Debug.Log("Error en el nombre del gameobject: ¡O has puesto el nombre mal, " +
                              "o este objeto no debería contener este componente!");
+                Destroy(gameObject);
                 break;
         }
 	}
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
