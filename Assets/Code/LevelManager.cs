@@ -139,6 +139,12 @@ public class LevelManager : MonoBehaviour
                 warning.SetActive(true);
             }
 
+            //Si estabas en peligro y dejas de estarlo, apaga el warning
+            else if(warning.activeSelf && (ListaBloques[it].transform.position.y - spawner.transform.position.y) > 4)
+            {
+                warning.SetActive(false);
+            }
+
             it++;
         }
 

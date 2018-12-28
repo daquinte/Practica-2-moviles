@@ -25,7 +25,7 @@ public class PU_SumaBolas : MonoBehaviour {
 	}
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         Pelota aux = collision.gameObject.GetComponent<Pelota>();
         if (aux != null)

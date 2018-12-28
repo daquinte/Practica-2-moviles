@@ -34,7 +34,7 @@ public class LectorTXT : MonoBehaviour
             byte[] byteArray = System.Text.Encoding.ASCII.GetBytes(path);
             MemoryStream memoryStream = new MemoryStream(byteArray);
 
-             reader = new StreamReader(memoryStream);
+            reader = new StreamReader(memoryStream);
 
 
 #endif
