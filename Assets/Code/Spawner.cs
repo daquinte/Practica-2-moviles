@@ -39,7 +39,8 @@ public class Spawner : MonoBehaviour {
 
     /// <summary>
     /// Genera numPelotas instancias del prefab de Pelota que recibe,
-    /// Mediante una coroutina que las instancia.
+    /// Mediante una coroutina que las instancia en la posicion del raton
+    /// en el momento en el que el método fue llamado.
     /// </summary>
     /// <param name="numPelotas">Numero de pelotas que tiene que generar</param>
     /// <param name="p">PRefab de pelota</param>
@@ -47,20 +48,25 @@ public class Spawner : MonoBehaviour {
     {
         //Desactivar el texto
         numPelotasSpawner = numPelotas;
-        StartCoroutine(InstanciaPelota(numPelotas, p));
+        Vector3 mousePos = Input.mousePosition;
+        Vector2 targetPos = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y));
+        Vector2 posOrigen = new Vector2(transform.position.x, transform.position.y);
+
+        //Calcular la direccion restando el target a la posicion de origen2D
+        targetPos -= posOrigen;      
+
+
+        StartCoroutine(InstanciaPelota(numPelotas, p, targetPos, transform.position));
     }
 
-    IEnumerator InstanciaPelota(int numPelotas, Pelota pelotaPrefab)
+    IEnumerator InstanciaPelota(int numPelotas, Pelota pelotaPrefab, Vector2 targetPos, Vector3 posOrigen)
     {
         for (int i = 0; i < numPelotas; i++)
         {
             Pelota nuevaPelota = Instantiate(pelotaPrefab);
+            Vector2 dir = (targetPos).normalized;
 
-            Vector3 mousePos = Input.mousePosition;
-            Vector2 targetPos = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y));
-            Vector2 dir = (targetPos - new Vector2(transform.position.x, transform.position.y)).normalized;
-
-            nuevaPelota.LaunchBall(transform.position, dir);
+            nuevaPelota.LaunchBall(posOrigen, dir);
 
             numPelotasSpawner--;
 

@@ -2,9 +2,9 @@
 
 public class Bloque : MonoBehaviour {
 
-    int vida;
-    TextMesh tm;
-
+    int vida;                               //Vida
+    TextMesh tm;                            //Texto de vida
+   
     // Use this for initialization
     void Start () {
         tm = GetComponentInChildren<TextMesh>();
@@ -22,9 +22,13 @@ public class Bloque : MonoBehaviour {
         {
           
             vida--;
-            
-            if (vida == 0) {
 
+           
+           
+
+
+            if (vida == 0) {
+                LevelManager.instance.SumaPuntos();
                 LevelManager.instance.RestaBloque(this);
             }
         }

@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,8 +42,15 @@ public class LevelManager : MonoBehaviour
     public GameObject warning;                              //Warning de que estás a punto de morir
 
 
+    public Text textoPuntuacion;
+    public Slider sliderPuntuacion;
+    private int puntuacionActual;
+    private int puntuacionMaxima;                           //Limite de la barra. Si has llegado = 3 estrellas
+    private int multiplicadorPuntuacion;
 
-
+    private int numeroEstrellas;
+    
+    private int numeroNivelActual = 3;
     LineRenderer shootLine;                                 //Marca la trayectoria de disparo
 
 
@@ -62,9 +69,6 @@ public class LevelManager : MonoBehaviour
         //If instance already exists and it's not this:
         else if (instance != this)
             Destroy(gameObject);
-
-        //Sets this to not be destroyed when reloading scene
-        DontDestroyOnLoad(gameObject);
     }
     #endregion
 
@@ -74,7 +78,17 @@ public class LevelManager : MonoBehaviour
         gameOver = false;
 
         lectorNivel = GetComponentInChildren<LectorTXT>();
-        lectorNivel.LoadLevel(420);
+        lectorNivel.LoadLevel(3);
+
+        puntuacionMaxima = ListaBloques.Count * 5 * numeroNivelActual;
+        sliderPuntuacion.maxValue = puntuacionMaxima;
+        Debug.Log(puntuacionMaxima);
+        puntuacionActual = 0;
+        multiplicadorPuntuacion = 10;
+
+
+        numeroEstrellas = 0;
+
 
         puedeInstanciar = true;
         spawnerPosition = spawner.gameObject.transform.position;
@@ -83,7 +97,7 @@ public class LevelManager : MonoBehaviour
 
         shootLine = GetComponentInChildren<LineRenderer>();
 
-        numMaxPelotas = 10;         //Valor inicial
+        numMaxPelotas = 100;         //Valor inicial
         numPelotasAct = 0;
 
 
@@ -95,7 +109,8 @@ public class LevelManager : MonoBehaviour
         if (!gameOver)
         {
             //ACTUALIZA TEXTO PUNTOS BLA BLA BLA
-
+            textoPuntuacion.text = "Puntos: " + puntuacionActual;
+            sliderPuntuacion.value = puntuacionActual;
 
             //INPUT
 
@@ -107,8 +122,8 @@ public class LevelManager : MonoBehaviour
             if (Input.GetMouseButtonUp(0) && puedeInstanciar)
             {
                 shootLine.enabled = false;
-                numPelotasAct = numMaxPelotas;          //Establecemos el nº de pelotas en el tablero
-                spawner.GeneraPelotas(numPelotasAct, PelotaPrefab);
+                numPelotasAct = 0;          //Establecemos el nº de pelotas en el tablero
+                spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
 
                 puedeInstanciar = false;
             }
@@ -140,7 +155,7 @@ public class LevelManager : MonoBehaviour
             }
 
             //Si estabas en peligro y dejas de estarlo, apaga el warning
-            else if(warning.activeSelf && (ListaBloques[it].transform.position.y - spawner.transform.position.y) > 4)
+            else if (warning.activeSelf && (ListaBloques[it].transform.position.y - spawner.transform.position.y) > 4)
             {
                 warning.SetActive(false);
             }
@@ -154,7 +169,7 @@ public class LevelManager : MonoBehaviour
 
         //ACTUALIZA PUNTOS Y DEMÁS MIERDAS
         numPelotasAct = 0;
-        //numMaxPelotas += 10;    
+        multiplicadorPuntuacion = 10;
     }
 
     /// <summary>
@@ -182,17 +197,28 @@ public class LevelManager : MonoBehaviour
     /// Suma n pelotas al numero maximo de pelotas que tienes en este nivel
     /// </summary>
     /// <param name="n">pelotas a sumar</param>
-    public void SumaPelotasAlNumeroMaximo(int n) {
+    public void SumaPelotasAlNumeroMaximo(int n)
+    {
         numMaxPelotas += n;
     }
 
+
+    //Método que hace que las bolas que queden en el nivel vuelvan automaticamente al spawner
     public void Recogida()
     {
-        foreach (Pelota p in ListaPelotas)
-        {
-            // p.SetVueltaACasa();
-        }
+        //if (numPelotasAct == numMaxPelotas)
+        //{
+            foreach (Pelota p in ListaPelotas)
+            {
+                p.GoToSpawner(10, null);
+            }
+        //}
 
+    }
+
+    public void ReiniciaNivel()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 
     /// <summary>
@@ -216,6 +242,13 @@ public class LevelManager : MonoBehaviour
                 Debug.Log("tipo no registrado! No se crea nada");
                 break;
         }
+    }
+
+    //Método que suma puntos a la puntuación actual
+    public void SumaPuntos()
+    {
+        puntuacionActual += multiplicadorPuntuacion;
+        multiplicadorPuntuacion += 10;
     }
 
     #region  Methods Bloque
@@ -242,7 +275,7 @@ public class LevelManager : MonoBehaviour
                 Debug.Log("No debería haber un tipo 0");
                 break;
             case 1:
-                bloque = Instantiate(Bloque_1); 
+                bloque = Instantiate(Bloque_1);
                 break;
             case 2:
                 bloque = Instantiate(Bloque_2);
@@ -286,6 +319,7 @@ public class LevelManager : MonoBehaviour
 
     public void SumaPelota(Pelota nuevaPelota)
     {
+        numPelotasAct++;
         ListaPelotas.Add(nuevaPelota);
     }
 
