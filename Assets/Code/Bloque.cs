@@ -17,22 +17,21 @@ public class Bloque : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Pelota p = collision.gameObject.GetComponent<Pelota>();
         
-        if (collision.gameObject.tag == "Bola")
+        if (p != null)
         {
           
             vida--;
-
-           
-           
-
-
+            
             if (vida == 0) {
                 LevelManager.instance.SumaPuntos();
                 LevelManager.instance.RestaBloque(this);
             }
         }
     }
+
+
 
     public void ConfiguraBloque(int x, int y, int vida)
     {
