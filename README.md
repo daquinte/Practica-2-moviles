@@ -16,4 +16,4 @@ Tras cada disparo los bloques que no hayan sido destruídos descienden una posic
 - [x] Mantener el progreso del usuario (niveles desbloqueados) de tal forma que sea difícil romperlo y modificarlo externamente accediendo a los ficheros en el dispositivo.
 - [ ] Incorporar al menos un potenciador. Para ello será necesario incorporar monedavirtual, por lo que también deberá guardarse, de forma segura, la cantidad de rubíes
       acumulados. El modo de conseguir esos rubíes puede escogerse como se desee.
-- [ ]Mostrar anuncios al usuario (con UnityAds) para monetizar el juego.
+- [ ] Mostrar anuncios al usuario (con UnityAds) para monetizar el juego.
