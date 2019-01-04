@@ -13,12 +13,15 @@ public class LevelManager : MonoBehaviour
     //ATRIBUTOS DE LEVELMANAGER
     LectorTXT lectorNivel;
     bool gameOver;
+    public bool Pausa { get; set; }
 
-    int numMaxPelotas;                                      //Numero (máximo actual) de pelotas que va a generar el spawner.
+    List<GameObject> ListaObjetosADestruir;
+
+    public int numMaxPelotas;                                //Numero (máximo actual) de pelotas que va a generar el spawner.
     int numPelotasAct;                                      //Numero de pelotas por el tablero
     public Pelota PelotaPrefab;                             //Prefab de la pelota
     List<Pelota> ListaPelotas;                             //Array de pelotas
-    public Button vueltaCasa;                               //Boton de vuelta a casa
+   
 
     List<Bloque> ListaBloques;                              //Lista de Bloques
     public Bloque Bloque_1;                                 //Prefab del bloque 1
@@ -32,6 +35,10 @@ public class LevelManager : MonoBehaviour
     public GameObject PU_sumaPelotas2;                      //Prefab del powerup
     public GameObject PU_sumaPelotas3;                      //Prefab del powerup
 
+    public GameObject PU_Laser_Horizontal;                  //Prefab del laser horizontal
+    public GameObject PU_Laser_Vertical;                    //Prefab del laser vertical
+
+
 
     public Spawner spawner;                                 //Spawner del nivel
     bool llegadaPrimeraPelota;                              //Bool que determina si ha llegado la primera serpiente
@@ -41,11 +48,8 @@ public class LevelManager : MonoBehaviour
     public DeathZone deathZone;                             //Deathzone del nivel
     public GameObject warning;                              //Warning de que estás a punto de morir
 
-
-    public Text textoPuntuacion;
-    public Slider sliderPuntuacion;
+    public int puntuacionMaxima;                           //Limite de la barra. Si has llegado = 3 estrellas
     private int puntuacionActual;
-    private int puntuacionMaxima;                           //Limite de la barra. Si has llegado = 3 estrellas
     private int multiplicadorPuntuacion;
 
     private int numeroEstrellas;
@@ -73,16 +77,19 @@ public class LevelManager : MonoBehaviour
     #endregion
 
     //Use this for init
+    //TODO: ordenar eso mejor
     void Start()
     {
         gameOver = false;
+        Pausa = false;
+
+        ListaObjetosADestruir = new List<GameObject>();
 
         lectorNivel = GetComponentInChildren<LectorTXT>();
         lectorNivel.LoadLevel(3);
 
         puntuacionMaxima = ListaBloques.Count * 5 * numeroNivelActual;
-        sliderPuntuacion.maxValue = puntuacionMaxima;
-        Debug.Log(puntuacionMaxima);
+        
         puntuacionActual = 0;
         multiplicadorPuntuacion = 10;
 
@@ -97,7 +104,9 @@ public class LevelManager : MonoBehaviour
 
         shootLine = GetComponentInChildren<LineRenderer>();
 
-        numMaxPelotas = 100;         //Valor inicial
+        if(numMaxPelotas == 0) { 
+            numMaxPelotas = 100;         //Valor inicial
+        }
         numPelotasAct = 0;
 
 
@@ -106,12 +115,8 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!gameOver)
+        if (!gameOver && !Pausa)
         {
-            //ACTUALIZA TEXTO PUNTOS BLA BLA BLA
-            textoPuntuacion.text = "Puntos: " + puntuacionActual;
-            sliderPuntuacion.value = puntuacionActual;
-
             //INPUT
 
             if (Input.GetMouseButtonDown(0) && puedeInstanciar)
@@ -167,11 +172,22 @@ public class LevelManager : MonoBehaviour
         puedeInstanciar = true;
         llegadaPrimeraPelota = false;
 
+        //ELIMINA LOS OBJETOS INNECESARIOS(Power ups)
+        if(ListaObjetosADestruir.Count != 0)
+        {
+            foreach (GameObject GO in ListaObjetosADestruir)
+            {
+                Destroy(GO);
+            }
+        }
+
         //ACTUALIZA PUNTOS Y DEMÁS MIERDAS
         numPelotasAct = 0;
         multiplicadorPuntuacion = 10;
     }
 
+    public int getPuntuacionActual() { return puntuacionActual; }
+   
     /// <summary>
     /// Determina la posicion nueva del spawner si es la primera bola
     /// Llama a la bola para avisarla de que modifique su comportamiento
@@ -222,6 +238,16 @@ public class LevelManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Inserta el objeto dado por parámetro en la lista de objetos que se han de borrar
+    /// al inicio de cada ronda de juego. Idealmente se usa para powerup de laser.
+    /// </summary>
+    /// <param name="gameObject"></param>
+    public void InsertaObjetoParaEliminar(GameObject gameObject)
+    {
+        ListaObjetosADestruir.Add(gameObject);
+    }
+
+    /// <summary>
     /// Instancia en la escena el power up del tipo dado.
     /// </summary>
     /// <param name="tipo">tipo del powerup</param>
@@ -229,6 +255,12 @@ public class LevelManager : MonoBehaviour
     {
         switch (tipo)
         {
+            case 7: //Laser horizontal
+                Instantiate(PU_Laser_Horizontal, new Vector3(x, y, 0), Quaternion.identity);
+                break;
+            case 8: //Laser vertical
+                Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
+                break;
             case 21:
                 Instantiate(PU_sumaPelotas1, new Vector3(x, y, 0), Quaternion.identity);
                 break;

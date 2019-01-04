@@ -21,16 +21,22 @@ public class Bloque : MonoBehaviour {
         
         if (p != null)
         {
-          
-            vida--;
-            
-            if (vida == 0) {
-                LevelManager.instance.SumaPuntos();
-                LevelManager.instance.RestaBloque(this);
-            }
+            RestaVida();
         }
     }
-
+    
+    /// <summary>
+    /// Resta su vida local y si es 0 avisa al Level Manager.
+    /// </summary>
+    public void RestaVida()
+    {
+        vida--;
+        if (vida == 0)
+        {
+            LevelManager.instance.SumaPuntos();
+            LevelManager.instance.RestaBloque(this);
+        }
+    }
 
 
     public void ConfiguraBloque(int x, int y, int vida)

@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-        StartCoroutine(DestroyAfterSeconds(100));
-	}
-	
+    private void OnEnable()
+    {
+        StartCoroutine(DisableAfterSeconds(0.5f));
+    }
+    
     /// <summary>
-    /// Destruye el objeto tras time segundos
+    /// Deshabilita el objeto tras time segundos
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-	IEnumerator DestroyAfterSeconds(int time)
+    IEnumerator DisableAfterSeconds(float time)
     {
-        yield return new WaitForSeconds(1);
-        Destroy(gameObject);
+        yield return new WaitForSeconds(time);
+        gameObject.SetActive(false);
 
         yield break; //Detiene la corroutina
     }

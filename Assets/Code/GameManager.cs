@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //Serialization
 using System.Runtime.Serialization.Formatters.Binary;
@@ -13,8 +14,6 @@ using System.IO;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-
-
     public int Rubies { get; set; }                       //Moneda de pago
     public int Estrellas { get; set; }                    //Moneda F2P
 
@@ -43,7 +42,7 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        Rubies = 300;
     }
 
     // Update is called once per frame
@@ -113,5 +112,22 @@ public class GameManager : MonoBehaviour
     {
         GUI.Label(new Rect(10, 10, 100, 30), "Estrellas: " + Estrellas);
         GUI.Label(new Rect(10, 40, 150, 30), "Rubies: " + Rubies);
+    }
+
+    /// <summary>
+    /// Resta num rubies al contador global de rubies del juego
+    /// </summary>
+    /// <param name="num"></param>
+    public bool RestaRubies(int num)
+    {
+        if (Rubies - num >= 0)
+        {
+            Rubies -= num;
+            return true;
+        }
+
+        else return false;
+       
+
     }
 }
