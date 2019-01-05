@@ -113,7 +113,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1336523207507436
 GameObject:
   m_ObjectHideFlags: 1
@@ -282,7 +282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1877655928469940
 GameObject:
   m_ObjectHideFlags: 1
@@ -336,7 +336,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1980635081377124
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
@@ -350,7 +350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1992821781729458
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,7 +408,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114882681179261284}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114633638375522364}
+        m_MethodName: Panel_Cancelar
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114181463127150194
@@ -895,7 +906,7 @@ MonoBehaviour:
   textoPagoInsuficiente: {fileID: 114715696840533742}
   botonAceptarPago: {fileID: 114519291611603526}
   botonCancelarPago: {fileID: 114412967530059036}
-  botonAceptarGenerico: {fileID: 0}
+  botonAceptarGenerico: {fileID: 114092975212218910}
 --- !u!114 &114708170785936758
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1541,12 +1552,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_Children: []
-  m_Father: {fileID: 224465649237775328}
-  m_RootOrder: 5
+  m_Father: {fileID: 224785018188465216}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -77.799995}
+  m_AnchoredPosition: {x: 0, y: -34.000008}
   m_SizeDelta: {x: 1681.7, y: 139.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224305007294250832
@@ -1601,7 +1612,6 @@ RectTransform:
   - {fileID: 224943003364065364}
   - {fileID: 224305007294250832}
   - {fileID: 224785018188465216}
-  - {fileID: 224232434319089396}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1626,7 +1636,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -75.15001}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224699297698611642
@@ -1679,6 +1689,7 @@ RectTransform:
   - {fileID: 224034141373537896}
   - {fileID: 224800172474268826}
   - {fileID: 224539426694614292}
+  - {fileID: 224232434319089396}
   m_Father: {fileID: 224465649237775328}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

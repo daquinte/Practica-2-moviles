@@ -33,6 +33,20 @@ public class CanvasManager : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Establece el panel a los valores por defecto,
+    /// tiene que ser llamado cuando quieras quitar los popup en "Panel_Cancelar" 
+    /// y reanudar la partida
+    /// </summary>
+    private void SetPanelToDefault()
+    {
+        textoPagoInsuficiente.gameObject.SetActive(false);
+        botonAceptarGenerico.gameObject.SetActive(false);
+        botonAceptarPago.gameObject.SetActive(true);
+        botonCancelarPago.gameObject.SetActive(true);
+
+    }
+
 
     public void Panel_Confirmacion()
     {
@@ -46,7 +60,6 @@ public class CanvasManager : MonoBehaviour {
         
         if (!GameManager.instance.RestaRubies(2000))
         {
-            Debug.Log("Activo el EresPobre");
             botonAceptarPago.gameObject.SetActive(false);
             botonCancelarPago.gameObject.SetActive(false);
 
@@ -62,11 +75,8 @@ public class CanvasManager : MonoBehaviour {
 
     public void Panel_Cancelar()
     {
+        SetPanelToDefault();
         panel.SetActive(false);
         LevelManager.instance.Pausa = false;
     }
 }
-
-
-//TODO: Ajustar el panel a los valores predeterminados cuando este desaparece del todo
-//TODO: Quitar el texto de eresPobre cuando le das a ok (relacionado con lo e arriba en verdad)
