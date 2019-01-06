@@ -14,6 +14,18 @@ public class LevelManager : MonoBehaviour
     LectorTXT lectorNivel;
     bool gameOver;
     public bool Pausa { get; set; }
+    public int  puntuacionMaxima;                           //Limite de la barra. Si has llegado = 3 estrellas
+    private int puntuacionActual;
+    private int multiplicadorPuntuacion;
+
+    private int numeroEstrellas;
+
+
+    public const int bordeLateralIzquierdo = -2;
+    public const int bordeLateralDerecho = 12;
+    public const int bordeSuperior = 2;
+    public const int bordeInferior = -14;
+    
 
     List<GameObject> ListaObjetosADestruir;
 
@@ -21,7 +33,7 @@ public class LevelManager : MonoBehaviour
     int numPelotasAct;                                      //Numero de pelotas por el tablero
     public Pelota PelotaPrefab;                             //Prefab de la pelota
     List<Pelota> ListaPelotas;                             //Array de pelotas
-   
+
 
     List<Bloque> ListaBloques;                              //Lista de Bloques
     public Bloque Bloque_1;                                 //Prefab del bloque 1
@@ -48,12 +60,8 @@ public class LevelManager : MonoBehaviour
     public DeathZone deathZone;                             //Deathzone del nivel
     public GameObject warning;                              //Warning de que estás a punto de morir
 
-    public int puntuacionMaxima;                           //Limite de la barra. Si has llegado = 3 estrellas
-    private int puntuacionActual;
-    private int multiplicadorPuntuacion;
+   
 
-    private int numeroEstrellas;
-    
     private int numeroNivelActual = 3;
     LineRenderer shootLine;                                 //Marca la trayectoria de disparo
 
@@ -89,7 +97,7 @@ public class LevelManager : MonoBehaviour
         lectorNivel.LoadLevel(3);
 
         puntuacionMaxima = ListaBloques.Count * 5 * numeroNivelActual;
-        
+
         puntuacionActual = 0;
         multiplicadorPuntuacion = 10;
 
@@ -104,7 +112,8 @@ public class LevelManager : MonoBehaviour
 
         shootLine = GetComponentInChildren<LineRenderer>();
 
-        if(numMaxPelotas == 0) { 
+        if (numMaxPelotas == 0)
+        {
             numMaxPelotas = 100;         //Valor inicial
         }
         numPelotasAct = 0;
@@ -126,12 +135,27 @@ public class LevelManager : MonoBehaviour
 
             if (Input.GetMouseButtonUp(0) && puedeInstanciar)
             {
-                shootLine.enabled = false;
-                numPelotasAct = 0;          //Establecemos el nº de pelotas en el tablero
-                spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
+                //Si el raton está menos de -1 o más de 11 en la X
+                //O que no sea mayor que 1 y no sea menos que -13 en la Y
+                Vector3 mousePos = Input.mousePosition;
+                Vector2 touchPos = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y));
+                if ((touchPos.x >= bordeLateralIzquierdo && touchPos.x <= bordeLateralDerecho)
+                    && (touchPos.y >= bordeInferior && touchPos.y <= bordeSuperior))
+                {
+                    shootLine.enabled = false;
+                    numPelotasAct = 0;          //Establecemos el nº de pelotas en el tablero
+                    spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
 
-                puedeInstanciar = false;
+                    puedeInstanciar = false;
+                }
             }
+        }
+        //Has ganado la partida
+        else if(ListaBloques.Count == 0)
+        {
+            //Sacar el mensaje de ¡Has ganado!
+
+            //Boton de continuar al menu
         }
     }
 
@@ -173,7 +197,7 @@ public class LevelManager : MonoBehaviour
         llegadaPrimeraPelota = false;
 
         //ELIMINA LOS OBJETOS INNECESARIOS(Power ups)
-        if(ListaObjetosADestruir.Count != 0)
+        if (ListaObjetosADestruir.Count != 0)
         {
             foreach (GameObject GO in ListaObjetosADestruir)
             {
@@ -186,8 +210,41 @@ public class LevelManager : MonoBehaviour
         multiplicadorPuntuacion = 10;
     }
 
-    public int getPuntuacionActual() { return puntuacionActual; }
-   
+    /// <summary>
+    /// Cuando el ususario compra el power ups, y la compra es aceptada
+    /// se llama a este metodo para que genere n lasers
+    /// </summary>
+    public void ColocaPowerUpLasers(int n)
+    {
+        int i = 0;
+        do
+        {
+            int x, y;
+            x = Random.Range(bordeLateralIzquierdo, bordeLateralDerecho+1);
+            y = Random.Range(bordeSuperior, bordeInferior+1);
+
+            RaycastHit2D raycast = Physics2D.Raycast(new Vector2(x, y), Vector2.zero);
+            if (raycast.collider == null)
+            {
+                //No ha chocado con nada, instancio un rayo aleatorio
+                int randomBinario = Random.Range(0, 2);
+                if (randomBinario == 0)
+                {
+                     Instantiate(PU_Laser_Horizontal, new Vector3(x, y, 0), Quaternion.identity);
+                }
+                else Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
+
+                //Sumamos i 
+                i++;
+            }
+
+        }
+        while (i < n);
+    }
+
+    public int GetPuntuacionActual() { return puntuacionActual; }
+    public int GetPelotasSpawner()  { return (numMaxPelotas - numPelotasAct); }
+
     /// <summary>
     /// Determina la posicion nueva del spawner si es la primera bola
     /// Llama a la bola para avisarla de que modifique su comportamiento
@@ -224,10 +281,10 @@ public class LevelManager : MonoBehaviour
     {
         //if (numPelotasAct == numMaxPelotas)
         //{
-            foreach (Pelota p in ListaPelotas)
-            {
-                p.GoToSpawner(10, null);
-            }
+        foreach (Pelota p in ListaPelotas)
+        {
+            p.GoToSpawner(10, null);
+        }
         //}
 
     }

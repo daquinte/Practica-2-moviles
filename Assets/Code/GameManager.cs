@@ -14,8 +14,8 @@ using System.IO;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    public int Rubies { get; set; }                       //Moneda de pago
-    public int Estrellas { get; set; }                    //Moneda F2P
+    public int Rubies { get; set; }                 //Moneda de pago
+    public int Estrellas { get; set; }              //Moneda F2P
 
     bool[] nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
     int[] estrellasPorNivel;                        //Guardas las estrellas por nivel
@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Rubies = 300;
+        nivelesAccesibles = new bool[10];
+        nivelesAccesibles[1] = true;
     }
 
     // Update is called once per frame

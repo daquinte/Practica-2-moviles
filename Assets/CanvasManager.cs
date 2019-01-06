@@ -12,12 +12,20 @@ public class CanvasManager : MonoBehaviour {
     public Text textoPuntuacion;
     public Text textoPago;
     public Text textoPagoInsuficiente;
+    public Text textoPelotas;
 
     //Botones
     public Button botonAceptarPago;
     public Button botonCancelarPago;
     public Button botonAceptarGenerico;                 //Acepta la accion para desactivar el panel
 
+    //Estrellas
+    public GameObject estrellaBase;
+    public GameObject estrellaMedio;
+    public GameObject estrellaFinal;
+
+    //Sprites
+    public Sprite estrellaConseguida;
 
     // Use this for initialization
     void Start () {
@@ -27,9 +35,34 @@ public class CanvasManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Actualiza puntuacion
-        int puntuacionAct = LevelManager.instance.getPuntuacionActual();
+        int puntuacionAct = LevelManager.instance.GetPuntuacionActual();
+        EvaluaPuntuacion(puntuacionAct);
         textoPuntuacion.text = "Puntos: " + puntuacionAct;
         sliderPuntuacion.value = puntuacionAct;
+
+        int pelotasActuales = LevelManager.instance.GetPelotasSpawner();
+        textoPelotas.text = "Pelotas: " + pelotasActuales;
+    }
+
+    /// <summary>
+    /// Enciende las estrellas en función de la puntuación obtenida
+    /// </summary>
+    private void EvaluaPuntuacion(int puntuacion)
+    {
+        if(puntuacion >= 1 && estrellaBase.GetComponent<Image>().sprite != estrellaConseguida)
+        {
+            estrellaBase.GetComponent<Image>().sprite = estrellaConseguida;
+        }
+        //La puntuacion de la mitad la guardas aqui y la sacas de un get del LevelManager
+        if (puntuacion >= 100 && estrellaMedio.GetComponent<Image>().sprite != estrellaConseguida)
+        {
+            estrellaMedio.GetComponent<Image>().sprite = estrellaConseguida;
+        }
+
+        if (puntuacion >= 200 && estrellaFinal.GetComponent<Image>().sprite != estrellaConseguida)
+        {
+            estrellaFinal.GetComponent<Image>().sprite = estrellaConseguida;
+        }
 
     }
 
@@ -58,7 +91,7 @@ public class CanvasManager : MonoBehaviour {
     {
         
         
-        if (!GameManager.instance.RestaRubies(2000))
+        if (!GameManager.instance.RestaRubies(1))
         {
             botonAceptarPago.gameObject.SetActive(false);
             botonCancelarPago.gameObject.SetActive(false);
@@ -68,6 +101,9 @@ public class CanvasManager : MonoBehaviour {
         }
         else
         {
+            //LLamar al levelManager para que active el power up
+
+            LevelManager.instance.ColocaPowerUpLasers(4);
             panel.SetActive(false);
             LevelManager.instance.Pausa = false;
         }
