@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 //Serialization
@@ -53,7 +55,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    //Esto no acabará estando aqui
+    //  Esto no acabará estando aqui
 
     /// <summary>
     /// Guarda el estado del juego en un .dat
@@ -66,7 +68,7 @@ public class GameManager : MonoBehaviour
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/ProgresoJugador.dat");
 
-        PlayerData data = new PlayerData(Rubies, Estrellas);
+        PlayerData data = new PlayerData(Rubies, Estrellas, nivelesAccesibles, estrellasPorNivel, puntosPorNivel);
 
         //Serializamos data y lo guardamos en file
         bf.Serialize(file, data);
@@ -99,21 +101,39 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     class PlayerData
     {
-        public PlayerData (int rubies, int estrellas)
+        public PlayerData (int rubies, int estrellas, bool [] niveles, int[] estrellasNivel, int[] puntosNivel)
         {
             _rubies = rubies;
             _estrellas = estrellas;
+
+            _nivelesAccesibles = niveles;
+            _estrellasPorNivel = estrellasNivel;
+            _puntosPorNivel = puntosNivel;
         }
 
-        public int _rubies;
-        public int _estrellas;
-    }
+
+        public int _rubies    { get; set; }
+        public int _estrellas { get; set; }
+
+        public bool[] _nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
+        public int[]  _estrellasPorNivel;                       //Guardas las estrellas por nivel
+        public int[]  _puntosPorNivel;                          //Guardamos los puntos por nivel
+    }   
 
 
     private void OnGUI()
     {
         GUI.Label(new Rect(10, 10, 100, 30), "Estrellas: " + Estrellas);
         GUI.Label(new Rect(10, 40, 150, 30), "Rubies: " + Rubies);
+    }
+
+    public void CargaNivel()
+    {
+      int nivel = int.Parse(EventSystem.current.currentSelectedGameObject.name);
+        Debug.Log(nivel);
+      SceneManager.LoadScene("GameScene");
+      LevelManager.numeroNivelActual = nivel;
+
     }
 
     /// <summary>
