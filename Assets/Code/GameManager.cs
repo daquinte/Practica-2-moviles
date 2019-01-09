@@ -23,6 +23,11 @@ public class GameManager : MonoBehaviour
     int[] estrellasPorNivel;                        //Guardas las estrellas por nivel
     int[] puntosPorNivel;                           //Guarda los puntos por nivel
 
+    //Botones menú
+    public GameObject niveles;
+    public GameObject botonesNiveles;
+    public Text titulo;
+
     #region Singleton
     public static GameManager instance;
 
@@ -152,4 +157,25 @@ public class GameManager : MonoBehaviour
        
 
     }
+
+    /// <summary>
+    /// Hace ue los botones d elos niveles sean visibles
+    /// </summary>
+    public void Botones_Niveles()
+    {
+        niveles.SetActive(false);
+        titulo.gameObject.SetActive(false);
+        botonesNiveles.SetActive(true);
+    }
+
+    /// <summary>
+    /// Vuelve a la pantalla de título desde la selección de niveles
+    /// </summary>
+    public void VolverAtras()
+    {
+        botonesNiveles.SetActive(false);
+        niveles.SetActive(true);
+        titulo.gameObject.SetActive(true);
+    }
+
 }

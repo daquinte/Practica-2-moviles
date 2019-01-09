@@ -171,4 +171,5 @@ public class CanvasManager : MonoBehaviour {
         panelCompra.SetActive(false);
         LevelManager.instance.Pausa = false;
     }
+
 }
