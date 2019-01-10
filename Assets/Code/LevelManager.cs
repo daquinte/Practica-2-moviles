@@ -273,8 +273,11 @@ public class LevelManager : MonoBehaviour
     {
         if (numeroNivelActual + 1 < 10)
         {
+           
             numeroNivelActual++;
+            GameManager.instance.DesbloqueaNivel(numeroNivelActual);
             SceneManager.LoadScene("GameScene");
+            
         }
         else
         {

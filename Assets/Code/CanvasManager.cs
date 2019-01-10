@@ -74,16 +74,19 @@ public class CanvasManager : MonoBehaviour {
         if(puntuacion >= 1 && estrellaBase.GetComponent<Image>().sprite != estrellaConseguida)
         {
             estrellaBase.GetComponent<Image>().sprite = estrellaConseguida;
+            GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
         }
         //La puntuacion de la mitad la guardas aqui y la sacas de un get del LevelManager
         if (puntuacion >= 100 && estrellaMedio.GetComponent<Image>().sprite != estrellaConseguida)
         {
             estrellaMedio.GetComponent<Image>().sprite = estrellaConseguida;
+            GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
         }
 
         if (puntuacion >= 200 && estrellaFinal.GetComponent<Image>().sprite != estrellaConseguida)
         {
             estrellaFinal.GetComponent<Image>().sprite = estrellaConseguida;
+            GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
         }
 
     }

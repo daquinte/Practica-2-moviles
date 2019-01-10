@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 //Serialization
@@ -20,13 +19,8 @@ public class GameManager : MonoBehaviour
     public int Estrellas { get; set; }              //Moneda F2P
 
     bool[] nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
-    int[] estrellasPorNivel;                        //Guardas las estrellas por nivel
+    public int[] estrellasPorNivel;                        //Guardas las estrellas por nivel
     int[] puntosPorNivel;                           //Guarda los puntos por nivel
-
-    //Botones menú
-    public GameObject niveles;
-    public GameObject botonesNiveles;
-    public Text titulo;
 
     #region Singleton
     public static GameManager instance;
@@ -43,6 +37,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         //InitGame();
+
     }
     #endregion  //Awake and Singleton
 
@@ -51,7 +46,23 @@ public class GameManager : MonoBehaviour
     {
         Rubies = 300;
         nivelesAccesibles = new bool[10];
-        nivelesAccesibles[1] = true;
+        for (int i = 1; i < 10; i++)
+        {
+            nivelesAccesibles[i] = false;
+        }
+
+        estrellasPorNivel = new int[10];
+        puntosPorNivel = new int[10];
+        //For para inicializar los vectores de estrellas y puntos
+        for (int i = 0; i < 10; i++)
+        {
+            estrellasPorNivel[i] = 0;
+            puntosPorNivel[i] = 0;
+        }
+
+        nivelesAccesibles[0] = true;
+
+        Load();
     }
 
     // Update is called once per frame
@@ -98,13 +109,21 @@ public class GameManager : MonoBehaviour
             //Esto hay que ponerlo mejor, es para la prueba!
             Estrellas = data._estrellas;
             Rubies = data._rubies;
+
+            /*for (int i = 0; i < 10; i++)
+            {
+                nivelesAccesibles[i] = data._nivelesAccesibles[2];
+                estrellasPorNivel[i] = data._estrellasPorNivel[0];
+                puntosPorNivel[i] = data._puntosPorNivel[0];
+            }*/
         }
+       
     }
 
     //Datos que vamos a guardar en el .dat; Se podría hacer mejor.
     //Estos datos se tienen que serializar
     [System.Serializable]
-    class PlayerData
+    class PlayerData : System.Object
     {
         public PlayerData (int rubies, int estrellas, bool [] niveles, int[] estrellasNivel, int[] puntosNivel)
         {
@@ -128,17 +147,8 @@ public class GameManager : MonoBehaviour
 
     private void OnGUI()
     {
-        GUI.Label(new Rect(10, 10, 100, 30), "Estrellas: " + Estrellas);
-        GUI.Label(new Rect(10, 40, 150, 30), "Rubies: " + Rubies);
-    }
-
-    public void CargaNivel()
-    {
-      int nivel = int.Parse(EventSystem.current.currentSelectedGameObject.name);
-        Debug.Log(nivel);
-      SceneManager.LoadScene("GameScene");
-      LevelManager.numeroNivelActual = nivel;
-
+        GUI.Label(new Rect(10, 10, 10000, 30000), "Estrellas: " + Estrellas);
+        GUI.Label(new Rect(10, 40, 15000, 30000), "Rubies: " + Rubies);
     }
 
     /// <summary>
@@ -158,24 +168,31 @@ public class GameManager : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// Hace ue los botones d elos niveles sean visibles
-    /// </summary>
-    public void Botones_Niveles()
+    public void SumaEstrellas (int nivel)
     {
-        niveles.SetActive(false);
-        titulo.gameObject.SetActive(false);
-        botonesNiveles.SetActive(true);
+        if (estrellasPorNivel[nivel - 1] < 3)
+            estrellasPorNivel[nivel - 1]++; 
+    }
+
+    public void CargaNivel(int nivel)
+    {
+
+        if (nivelesAccesibles[nivel - 1])
+        {
+            SceneManager.LoadScene("GameScene");
+            LevelManager.numeroNivelActual = nivel;
+        }
     }
 
     /// <summary>
-    /// Vuelve a la pantalla de título desde la selección de niveles
+    /// Abre el acceso a los niveles superados en el menú de selección de nivel
     /// </summary>
-    public void VolverAtras()
+    public void DesbloqueaNivel(int nivel)
     {
-        botonesNiveles.SetActive(false);
-        niveles.SetActive(true);
-        titulo.gameObject.SetActive(true);
+
+        nivelesAccesibles[nivel - 1] = true;
+        Save();
+
     }
 
 }
