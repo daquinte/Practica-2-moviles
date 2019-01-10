@@ -63,7 +63,7 @@ public class CanvasManager : MonoBehaviour {
         sliderPuntuacion.value = puntuacionAct;
 
         int pelotasActuales = LevelManager.instance.GetPelotasSpawner();
-        textoPelotas.text = "Pelotas: " + pelotasActuales;
+        textoPelotas.text = "Brillos: " + pelotasActuales;
     }
 
     /// <summary>
