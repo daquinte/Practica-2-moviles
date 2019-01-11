@@ -30,13 +30,15 @@ public class Pelota : MonoBehaviour {
     /// <param name="time">Tiempo que tarda en llegar</param>
     /// <param name="callback">Función callback</param>
     public void GoToSpawner(float time, System.Action<Pelota> callback)
-    { 
-        GetComponent<CircleCollider2D>().isTrigger = true; //Ignora colisiones con los bloques para el botón de recogida
+    {
+        GetComponent<CircleCollider2D>().enabled = false;
+        
         GetComponent<Rigidbody2D>().velocity = Vector3.zero;
 
         Vector3 meta = LevelManager.instance.GetSpawnerPosition();
 
         StartCoroutine(GoTo(time, meta, callback));
+
     }
 
     private IEnumerator GoTo(float time, Vector3 meta, System.Action<Pelota> callback)

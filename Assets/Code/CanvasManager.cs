@@ -12,10 +12,12 @@ public class CanvasManager : MonoBehaviour {
     //Paneles
     public GameObject panelCompra;
     public GameObject panelGanador;
+    public GameObject panelPerdedor;
     public GameObject panelFinNiveles;
 
     //Textos
     public Text textoPuntuacion;
+    public Text textoRubies;
     public Text textoPago;
     public Text textoPagoInsuficiente;
     public Text textoPelotas;
@@ -51,7 +53,7 @@ public class CanvasManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        sliderPuntuacion.maxValue = LevelManager.instance.puntuacionMaxima;   
+  
     }
 	
 	// Update is called once per frame
@@ -62,6 +64,8 @@ public class CanvasManager : MonoBehaviour {
         textoPuntuacion.text = "Puntos: " + puntuacionAct;
         sliderPuntuacion.value = puntuacionAct;
 
+        textoRubies.text = "Rubies: " + GameManager.instance.GetRubies();
+
         int pelotasActuales = LevelManager.instance.GetPelotasSpawner();
         textoPelotas.text = "Brillos: " + pelotasActuales;
     }
@@ -71,24 +75,33 @@ public class CanvasManager : MonoBehaviour {
     /// </summary>
     private void EvaluaPuntuacion(int puntuacion)
     {
-        if(puntuacion >= 1 && estrellaBase.GetComponent<Image>().sprite != estrellaConseguida)
+        if(puntuacion >= 50 && estrellaBase.GetComponent<Image>().sprite != estrellaConseguida)
         {
             estrellaBase.GetComponent<Image>().sprite = estrellaConseguida;
             GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
         }
         //La puntuacion de la mitad la guardas aqui y la sacas de un get del LevelManager
-        if (puntuacion >= 100 && estrellaMedio.GetComponent<Image>().sprite != estrellaConseguida)
+        if (puntuacion >= sliderPuntuacion.maxValue/2 && estrellaMedio.GetComponent<Image>().sprite != estrellaConseguida)
         {
             estrellaMedio.GetComponent<Image>().sprite = estrellaConseguida;
             GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
         }
 
-        if (puntuacion >= 200 && estrellaFinal.GetComponent<Image>().sprite != estrellaConseguida)
+        if (puntuacion >= sliderPuntuacion.maxValue && estrellaFinal.GetComponent<Image>().sprite != estrellaConseguida)
         {
             estrellaFinal.GetComponent<Image>().sprite = estrellaConseguida;
             GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
         }
 
+    }
+
+    /// <summary>
+    /// Método que es llamado para asignar la puntuacion máxima que quieres en el nivel
+    /// </summary>
+    /// <param name="maxValue"></param>
+    public void SetMaxPuntuacion(int maxValue)
+    {
+        sliderPuntuacion.maxValue = maxValue;
     }
 
     /// <summary>
@@ -112,6 +125,12 @@ public class CanvasManager : MonoBehaviour {
     {
         panelGanador.SetActive(true);
     }
+
+    public void ActivaPanelPerdedor()
+    {
+        panelPerdedor.SetActive(true);
+    }
+
 
     public void ActivaPanelFinNivel()
     {
@@ -138,6 +157,11 @@ public class CanvasManager : MonoBehaviour {
         LevelManager.instance.CargaMenuPrincipal();
     }
 
+    public void Reiniciar()
+    {
+        LevelManager.instance.ReiniciaNivel();
+    }
+
 
 
     public void Panel_Confirmacion()
@@ -150,7 +174,7 @@ public class CanvasManager : MonoBehaviour {
     {
         
         
-        if (!GameManager.instance.RestaRubies(1))
+        if (!GameManager.instance.RestaRubies(25))
         {
             botonAceptarPago.gameObject.SetActive(false);
             botonCancelarPago.gameObject.SetActive(false);

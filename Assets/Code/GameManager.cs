@@ -15,11 +15,11 @@ using System.IO;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    public int Rubies { get; set; }                 //Moneda de pago
-    public int Estrellas { get; set; }              //Moneda F2P
+    int Rubies;           //Moneda de pago
+    int Estrellas;            //Moneda F2P
 
     bool[] nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
-    public int[] estrellasPorNivel;                        //Guardas las estrellas por nivel
+    int[] estrellasPorNivel;                        //Guardas las estrellas por nivel
     int[] puntosPorNivel;                           //Guarda los puntos por nivel
 
     #region Singleton
@@ -44,12 +44,16 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Rubies = 300;
+
+        Rubies = 100;
+        Estrellas = 0;
+
         nivelesAccesibles = new bool[10];
-        for (int i = 1; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             nivelesAccesibles[i] = false;
         }
+        nivelesAccesibles[0] = true;
 
         estrellasPorNivel = new int[10];
         puntosPorNivel = new int[10];
@@ -60,18 +64,10 @@ public class GameManager : MonoBehaviour
             puntosPorNivel[i] = 0;
         }
 
-        nivelesAccesibles[0] = true;
 
         Load();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    //  Esto no acabará estando aqui
 
     /// <summary>
     /// Guarda el estado del juego en un .dat
@@ -93,7 +89,10 @@ public class GameManager : MonoBehaviour
         file.Close();
     }
 
-
+    /// <summary>
+    /// Carga el estado del archivo .dat previamente creado
+    /// si este existiera.
+    /// </summary>
     public void Load()
     {
         //Comprobamos si el archivo existe antes de abrirlo
@@ -103,21 +102,21 @@ public class GameManager : MonoBehaviour
             FileStream file = File.Open(Application.persistentDataPath + "/ProgresoJugador.dat", FileMode.Open);
 
             //Tenemos que castear la deserializacion que ha leido a Playerdata
-            PlayerData data =(PlayerData)bf.Deserialize(file);
+            PlayerData data = (PlayerData)bf.Deserialize(file);
             file.Close();
 
             //Esto hay que ponerlo mejor, es para la prueba!
             Estrellas = data._estrellas;
             Rubies = data._rubies;
 
-            /*for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
-                nivelesAccesibles[i] = data._nivelesAccesibles[2];
-                estrellasPorNivel[i] = data._estrellasPorNivel[0];
-                puntosPorNivel[i] = data._puntosPorNivel[0];
-            }*/
+                nivelesAccesibles[i] = data._nivelesAccesibles[i];
+                estrellasPorNivel[i] = data._estrellasPorNivel[i];
+                puntosPorNivel[i] = data._puntosPorNivel[i];
+            }
         }
-       
+
     }
 
     //Datos que vamos a guardar en el .dat; Se podría hacer mejor.
@@ -125,7 +124,7 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     class PlayerData : System.Object
     {
-        public PlayerData (int rubies, int estrellas, bool [] niveles, int[] estrellasNivel, int[] puntosNivel)
+        public PlayerData(int rubies, int estrellas, bool[] niveles, int[] estrellasNivel, int[] puntosNivel)
         {
             _rubies = rubies;
             _estrellas = estrellas;
@@ -136,19 +135,12 @@ public class GameManager : MonoBehaviour
         }
 
 
-        public int _rubies    { get; set; }
+        public int _rubies { get; set; }
         public int _estrellas { get; set; }
 
         public bool[] _nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
-        public int[]  _estrellasPorNivel;                       //Guardas las estrellas por nivel
-        public int[]  _puntosPorNivel;                          //Guardamos los puntos por nivel
-    }   
-
-
-    private void OnGUI()
-    {
-        GUI.Label(new Rect(10, 10, 10000, 30000), "Estrellas: " + Estrellas);
-        GUI.Label(new Rect(10, 40, 15000, 30000), "Rubies: " + Rubies);
+        public int[] _estrellasPorNivel;                       //Guardas las estrellas por nivel
+        public int[] _puntosPorNivel;                          //Guardamos los puntos por nivel
     }
 
     /// <summary>
@@ -164,14 +156,25 @@ public class GameManager : MonoBehaviour
         }
 
         else return false;
-       
+
 
     }
 
-    public void SumaEstrellas (int nivel)
+    //GETTERS RUBIES Y ESTRELLAS
+    public int GetRubies() { return Rubies; }
+    public int GetEstrellas() { return Estrellas; }
+
+    public void SumaEstrellas(int nivel)
     {
+        Debug.Log("SumoEstrella");
         if (estrellasPorNivel[nivel - 1] < 3)
-            estrellasPorNivel[nivel - 1]++; 
+        {
+            Estrellas++;
+            Debug.Log(Estrellas);
+            estrellasPorNivel[nivel - 1]++;
+        }
+
+        Save();
     }
 
     public void CargaNivel(int nivel)
@@ -192,6 +195,7 @@ public class GameManager : MonoBehaviour
 
         nivelesAccesibles[nivel - 1] = true;
         Save();
+        Debug.Log("He guardado el nivel " + (nivel - 1));
 
     }
 

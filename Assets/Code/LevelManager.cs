@@ -96,7 +96,9 @@ public class LevelManager : MonoBehaviour
 
         ListaObjetosADestruir = new List<GameObject>();
         
-        puntuacionMaxima = ListaBloques.Count * 5 * numeroNivelActual;
+        puntuacionMaxima = ListaBloques.Count * ListaBloques.Count * numeroNivelActual;
+        //Le damos al CanvasManager la puntuacionMaxima para las estrellas
+        CanvasManager.instance.SetMaxPuntuacion(puntuacionMaxima);
 
         puntuacionActual = 0;
         multiplicadorPuntuacion = 10;
@@ -124,6 +126,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
         if (!gameOver && !Pausa)
         {
             //Si no has ganado
@@ -181,6 +184,7 @@ public class LevelManager : MonoBehaviour
             if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 1)
             {
                 gameOver = true;
+                CanvasManager.instance.ActivaPanelPerdedor();
             }
             //Si algún bloque está lo suficientemente cerca del Spawner activamos el warning
             else if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 4 && !warning.activeSelf)
@@ -208,6 +212,8 @@ public class LevelManager : MonoBehaviour
             {
                 Destroy(GO);
             }
+
+            ListaObjetosADestruir.Clear();
         }
 
         //ACTUALIZA PUNTOS Y DEMÁS MIERDAS
@@ -295,20 +301,19 @@ public class LevelManager : MonoBehaviour
     public void CargaNivel(int nivel)
     {
         numeroNivelActual = nivel;
-
-       
-
     }
 
     public void ReiniciaNivel()
     {
         SceneManager.LoadScene("GameScene");
+    
     }
 
     //Carga el menu principal
     public void CargaMenuPrincipal()
     {
         SceneManager.LoadScene("Menu Seleccion");
+        GameManager.instance.Save();
     }
 
 
@@ -321,22 +326,18 @@ public class LevelManager : MonoBehaviour
 
 
 
-
-
-
-
-
-
-    //Método que hace que las bolas que queden en el nivel vuelvan automaticamente al spawner
+    /// <summary>
+    /// Método que fuerza la recogida de las pelotas en cualquier momento
+    /// de la ejecución. Se activa y se desactiva la colision de los layer
+    /// pelota y power up temporalmemte para evitar que colisionen 
+    /// cuando no deberían.
+    /// </summary>
     public void Recogida()
     {
-        //if (numPelotasAct == numMaxPelotas)
-        //{
         foreach (Pelota p in ListaPelotas)
         {
-            p.GoToSpawner(10, null);
+            p.GoToSpawner(10, RestaPelota);
         }
-        //}
 
     }
 
@@ -467,7 +468,6 @@ public class LevelManager : MonoBehaviour
 
         Destroy(pelotaQuitada.gameObject);
 
-        spawner.SumaContadorSpawner();
 
         if (numPelotasAct <= 0) //Si han llegado todas las pelotas
         {

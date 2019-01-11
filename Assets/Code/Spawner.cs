@@ -10,18 +10,17 @@ public class Spawner : MonoBehaviour {
     #region Attributes
     public GameObject PelotaPrefab;
 
-    TextMesh textoPelotas;                  //Texto del Spawner
-    int numPelotasSpawner;                  //Nº de Pelotas almacenadas en el Spawner
+   
     #endregion
 
     // Use this for initialization
     void Start () {
-        textoPelotas = GetComponentInChildren<TextMesh>();
+       
     }
 
     void Update()
     {
-        textoPelotas.text = (numPelotasSpawner).ToString();
+     
     }
 
     //Método para modificar su posición cuando se lo indique LevelManager
@@ -32,10 +31,6 @@ public class Spawner : MonoBehaviour {
         //Reactivar el texto y empezar a contar las pelotas que han llegado
     }
 
-    public void SumaContadorSpawner()
-    {
-        numPelotasSpawner++;
-    }
 
     /// <summary>
     /// Genera numPelotas instancias del prefab de Pelota que recibe,
@@ -47,7 +42,7 @@ public class Spawner : MonoBehaviour {
     public void GeneraPelotas(int numPelotas, Pelota p)
     {
         //Desactivar el texto
-        numPelotasSpawner = numPelotas;
+     
         Vector3 mousePos = Input.mousePosition;
         Vector2 targetPos = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y));
         Vector2 posOrigen = new Vector2(transform.position.x, transform.position.y);
@@ -67,8 +62,6 @@ public class Spawner : MonoBehaviour {
             Vector2 dir = (targetPos).normalized;
 
             nuevaPelota.LaunchBall(posOrigen, dir);
-
-            numPelotasSpawner--;
 
             yield return null;
         }

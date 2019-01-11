@@ -10,13 +10,13 @@ public class canvasMenu : MonoBehaviour {
     public GameObject niveles;
     public GameObject botonesNiveles;
     public Text titulo;
+    public Text estrellas;
 
-    public Text estrellitas;
-
-    /*private void Update()
+    private void Update()
     {
-        estrellitas.text = "Estrellas en el nivel 0: " + GameManager.instance.estrellasPorNivel[0];
-    }*/
+        estrellas.text = "Estrellas totales: " + GameManager.instance.GetEstrellas();
+    }
+
 
     public void Carga_Nivel()
     {
@@ -27,7 +27,7 @@ public class canvasMenu : MonoBehaviour {
     }
 
     /// <summary>
-    /// Hace ue los botones d elos niveles sean visibles
+    /// Hace que los botones de los niveles sean visibles
     /// </summary>
     public void Botones_Niveles()
     {
