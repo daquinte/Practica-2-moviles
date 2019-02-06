@@ -10,10 +10,4 @@ Tras cada disparo los bloques que no hayan sido destruídos descienden una posic
 
 ###### Requisitos de implementacion
 
-- [x] Adaptar correctamente la visualización en pantalla en función de la relación de aspecto (ancho-alto) del dispositivo.
-- [x] Leer los mapas de ficheros de texto.
-- [ ] Incluir al menos un tipo de bloque especial
-- [x] Mantener el progreso del usuario (niveles desbloqueados) de tal forma que sea difícil romperlo y modificarlo externamente accediendo a los ficheros en el dispositivo.
-- [ ] Incorporar al menos un potenciador. Para ello será necesario incorporar monedavirtual, por lo que también deberá guardarse, de forma segura, la cantidad de rubíes
-      acumulados. El modo de conseguir esos rubíes puede escogerse como se desee.
-- [ ] Mostrar anuncios al usuario (con UnityAds) para monetizar el juego.
+- [ ] No tenéis anuncios, que era una de los requisitos de la práctica. 
