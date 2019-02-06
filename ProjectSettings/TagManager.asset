@@ -12,6 +12,8 @@ TagManager:
   - PowerUp1
   - PowerUp2
   - PowerUp3
+  - PowerUpLaserVertical
+  - PowerUpLaserHorizontal
   layers:
   - Default
   - TransparentFX

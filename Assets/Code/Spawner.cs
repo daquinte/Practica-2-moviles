@@ -13,16 +13,6 @@ public class Spawner : MonoBehaviour {
    
     #endregion
 
-    // Use this for initialization
-    void Start () {
-       
-    }
-
-    void Update()
-    {
-     
-    }
-
     //Método para modificar su posición cuando se lo indique LevelManager
      public void ActualizaPosicionSpawner(Vector3 nuevaPos)
     {

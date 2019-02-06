@@ -15,7 +15,7 @@ using System.IO;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    int Rubies;           //Moneda de pago
+    public int Rubies;           //Moneda de pago
     int Estrellas;            //Moneda F2P
 
     bool[] nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 
-        Rubies = 100;
+        Rubies = 100000;
         Estrellas = 0;
 
         nivelesAccesibles = new bool[10];
@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviour
 
     public void SumaEstrellas(int nivel)
     {
-        Debug.Log("SumoEstrella");
+        
         if (estrellasPorNivel[nivel - 1] < 3)
         {
             Estrellas++;

@@ -46,6 +46,7 @@ public class LevelManager : MonoBehaviour
     public Bloque Bloque_5;                                 //Prefab del bloque 5
     public Bloque Bloque_6;                                 //Prefab del bloque 6
 
+    List<GameObject> ListaPowerUps;
     public GameObject PU_sumaPelotas1;                      //Prefab del powerup
     public GameObject PU_sumaPelotas2;                      //Prefab del powerup
     public GameObject PU_sumaPelotas3;                      //Prefab del powerup
@@ -95,7 +96,8 @@ public class LevelManager : MonoBehaviour
         lectorNivel.LoadLevel(numeroNivelActual);
 
         ListaObjetosADestruir = new List<GameObject>();
-        
+        ListaPowerUps = new List<GameObject>();
+
         puntuacionMaxima = ListaBloques.Count * ListaBloques.Count * numeroNivelActual;
         //Le damos al CanvasManager la puntuacionMaxima para las estrellas
         CanvasManager.instance.SetMaxPuntuacion(puntuacionMaxima);
@@ -173,9 +175,8 @@ public class LevelManager : MonoBehaviour
     ///establecer puntos, nuevo numero max de pelotas y de algo más que no recuerdo ahora mismo.
     /// </summary>
     private void PreparaSiguienteGameRound()
-    {
-        Debug.Log("*PREPARNDO NUEVO GAME ROUND*");
-
+    { 
+    
         int it = 0;
         while (!gameOver && it < ListaBloques.Count)
         {
@@ -216,7 +217,17 @@ public class LevelManager : MonoBehaviour
             ListaObjetosADestruir.Clear();
         }
 
-        //ACTUALIZA PUNTOS Y DEMÁS MIERDAS
+
+        //BAJAR LOS POWER UPS ACTIVOS
+        int PUit = 0; ///usamos el mismo it que con los bloques.
+        Debug.Log("Lista Powerups tiene " + ListaPowerUps.Count);
+        while (PUit < ListaPowerUps.Count)
+        {
+            ListaPowerUps[PUit].transform.position -= new Vector3(0, 1, 0);
+            PUit++;
+        }
+
+        //ACTUALIZA PUNTOS
         numPelotasAct = 0;
         multiplicadorPuntuacion = 0;
     }
@@ -228,6 +239,7 @@ public class LevelManager : MonoBehaviour
     public void ColocaPowerUpLasers(int n)
     {
         int i = 0;
+
         do
         {
             int x, y;
@@ -242,11 +254,17 @@ public class LevelManager : MonoBehaviour
                 if (randomBinario == 0)
                 {
                     Instantiate(PU_Laser_Horizontal, new Vector3(x, y, 0), Quaternion.identity);
+                    ListaPowerUps.Add(PU_Laser_Horizontal);
                 }
-                else Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
+                else
+                {
+                    Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
+                    ListaPowerUps.Add(PU_Laser_Vertical);
+                }
 
-                //Sumamos i 
-                i++;
+                i++;                            //Sumamos i 
+                Debug.Log("He metido un powerUp, el count es " + ListaPowerUps.Count);
+
             }
 
         }
@@ -279,11 +297,11 @@ public class LevelManager : MonoBehaviour
     {
         if (numeroNivelActual + 1 < 10)
         {
-           
+
             numeroNivelActual++;
             GameManager.instance.DesbloqueaNivel(numeroNivelActual);
             SceneManager.LoadScene("GameScene");
-            
+
         }
         else
         {
@@ -306,7 +324,7 @@ public class LevelManager : MonoBehaviour
     public void ReiniciaNivel()
     {
         SceneManager.LoadScene("GameScene");
-    
+
     }
 
     //Carga el menu principal
@@ -317,9 +335,9 @@ public class LevelManager : MonoBehaviour
     }
 
 
-    //////////////
-    /// GETTERS //
-    //////////////
+    /*
+    GETTERS
+    */
     public int GetPuntuacionActual() { return puntuacionActual; }
     public int GetPelotasSpawner() { return (numMaxPelotas - numPelotasAct); }
     #endregion
@@ -334,6 +352,7 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public void Recogida()
     {
+        //TODO: DESACTIVAR EL BOTON CUANDO LE DEMOS
         foreach (Pelota p in ListaPelotas)
         {
             p.GoToSpawner(10, RestaPelota);
@@ -345,27 +364,39 @@ public class LevelManager : MonoBehaviour
 
     /// <summary>
     /// Inserta el objeto dado por parámetro en la lista de objetos que se han de borrar
-    /// al inicio de cada ronda de juego. Idealmente se usa para powerup de laser.
+    /// al inicio de cada ronda de juego y se elimina de la lista correspondiente. 
+    /// Idealmente se usa para powerup de laser.
     /// </summary>
-    /// <param name="gameObject"></param>
-    public void InsertaObjetoParaEliminar(GameObject gameObject)
+    /// <param name="gameObject">Objeto a eliminar</param>
+    void InsertaObjetoParaEliminar(GameObject gameObject)
     {
         ListaObjetosADestruir.Add(gameObject);
+
+        if (gameObject.GetComponent<PowerUpLaser>())
+        {
+            ListaPowerUps.Remove(gameObject);
+            Debug.Log("Laser borrado de la lista, nuevo tamanio: " + ListaPowerUps.Count);
+        }
     }
 
+    #region Power Up Methods
+
     /// <summary>
-    /// Instancia en la escena el power up del tipo dado.
+    /// Instancia en la escena el power up del tipo dado y lo introduce en la lista.
     /// </summary>
     /// <param name="tipo">tipo del powerup</param>
     public void CreaPowerUp(int x, int y, int tipo)
     {
+       
         switch (tipo)
         {
             case 7: //Laser horizontal
                 Instantiate(PU_Laser_Horizontal, new Vector3(x, y, 0), Quaternion.identity);
+                ListaPowerUps.Add(PU_Laser_Horizontal); //Metemos el powerup en la lista
                 break;
             case 8: //Laser vertical
                 Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
+                ListaPowerUps.Add(PU_Laser_Vertical); //Metemos el powerup en la lista                
                 break;
             case 21:
                 Instantiate(PU_sumaPelotas1, new Vector3(x, y, 0), Quaternion.identity);
@@ -380,9 +411,21 @@ public class LevelManager : MonoBehaviour
                 Debug.Log("tipo no registrado! No se crea nada");
                 break;
         }
+
+        Debug.Log("He metido un powerUp, el count es " + ListaPowerUps.Count);
     }
 
 
+    public void RestaPowerUp(GameObject PowerUpQuitado)
+    {
+        ListaPowerUps.Remove(PowerUpQuitado);
+
+        InsertaObjetoParaEliminar(PowerUpQuitado);
+    }
+
+    #endregion
+
+    //Métodos de bloque
     #region  Methods Bloque
     /// <summary>
     /// Crea una instancia del prefab del Bloque
