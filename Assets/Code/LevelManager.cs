@@ -219,12 +219,12 @@ public class LevelManager : MonoBehaviour
 
 
         //BAJAR LOS POWER UPS ACTIVOS
-        int PUit = 0; ///usamos el mismo it que con los bloques.
-        Debug.Log("Lista Powerups tiene " + ListaPowerUps.Count);
-        while (PUit < ListaPowerUps.Count)
+        foreach (GameObject PowerUp in ListaPowerUps)
         {
-            ListaPowerUps[PUit].transform.position -= new Vector3(0, 1, 0);
-            PUit++;
+            Debug.Log(PowerUp.transform.position.y);
+            PowerUp.transform.position -= new Vector3(0, 1, 0);
+            Debug.Log(PowerUp.transform.position.y);
+
         }
 
         //ACTUALIZA PUNTOS
@@ -245,6 +245,7 @@ public class LevelManager : MonoBehaviour
             int x, y;
             x = Random.Range(bordeLateralIzquierdo, bordeLateralDerecho + 1);
             y = Random.Range(bordeSuperior, bordeInferior + 1);
+            GameObject powerUp = null;
 
             RaycastHit2D raycast = Physics2D.Raycast(new Vector2(x, y), Vector2.zero);
             if (raycast.collider == null)
@@ -253,13 +254,13 @@ public class LevelManager : MonoBehaviour
                 int randomBinario = Random.Range(0, 2);
                 if (randomBinario == 0)
                 {
-                    Instantiate(PU_Laser_Horizontal, new Vector3(x, y, 0), Quaternion.identity);
-                    ListaPowerUps.Add(PU_Laser_Horizontal);
+                    powerUp = Instantiate(PU_Laser_Horizontal, new Vector3(x, y, 0), Quaternion.identity);
+                    ListaPowerUps.Add(powerUp);
                 }
                 else
                 {
-                    Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
-                    ListaPowerUps.Add(PU_Laser_Vertical);
+                    powerUp = Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
+                    ListaPowerUps.Add(powerUp);
                 }
 
                 i++;                            //Sumamos i 
@@ -375,7 +376,7 @@ public class LevelManager : MonoBehaviour
         if (gameObject.GetComponent<PowerUpLaser>())
         {
             ListaPowerUps.Remove(gameObject);
-            Debug.Log("Laser borrado de la lista, nuevo tamanio: " + ListaPowerUps.Count);
+            
         }
     }
 
@@ -387,32 +388,33 @@ public class LevelManager : MonoBehaviour
     /// <param name="tipo">tipo del powerup</param>
     public void CreaPowerUp(int x, int y, int tipo)
     {
-       
+        GameObject powerUp = null;
         switch (tipo)
         {
             case 7: //Laser horizontal
-                Instantiate(PU_Laser_Horizontal, new Vector3(x, y, 0), Quaternion.identity);
-                ListaPowerUps.Add(PU_Laser_Horizontal); //Metemos el powerup en la lista
+                powerUp = Instantiate(PU_Laser_Horizontal, new Vector3(x, y, 0), Quaternion.identity);
+                ListaPowerUps.Add(powerUp); //Metemos el powerup en la lista
                 break;
             case 8: //Laser vertical
-                Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
-                ListaPowerUps.Add(PU_Laser_Vertical); //Metemos el powerup en la lista                
+                powerUp = Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
+                ListaPowerUps.Add(powerUp);
                 break;
             case 21:
-                Instantiate(PU_sumaPelotas1, new Vector3(x, y, 0), Quaternion.identity);
+                powerUp = Instantiate(PU_sumaPelotas1, new Vector3(x, y, 0), Quaternion.identity);
+                ListaPowerUps.Add(powerUp);
                 break;
             case 22:
-                Instantiate(PU_sumaPelotas2, new Vector3(x, y, 0), Quaternion.identity);
+                powerUp = Instantiate(PU_sumaPelotas2, new Vector3(x, y, 0), Quaternion.identity);
+                ListaPowerUps.Add(powerUp);
                 break;
             case 23:
-                Instantiate(PU_sumaPelotas3, new Vector3(x, y, 0), Quaternion.identity);
+                powerUp = Instantiate(PU_sumaPelotas3, new Vector3(x, y, 0), Quaternion.identity);
+                ListaPowerUps.Add(powerUp);
                 break;
             default:
                 Debug.Log("tipo no registrado! No se crea nada");
                 break;
         }
-
-        Debug.Log("He metido un powerUp, el count es " + ListaPowerUps.Count);
     }
 
 
