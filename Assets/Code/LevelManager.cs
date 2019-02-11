@@ -12,7 +12,7 @@ public class LevelManager : MonoBehaviour
 
     //ATRIBUTOS DE LEVELMANAGER
 
-    public static int numeroNivelActual;
+    public static int numeroNivelActual = 0;
 
     LectorTXT lectorNivel;
     bool gameOver;
@@ -46,7 +46,7 @@ public class LevelManager : MonoBehaviour
     public Bloque Bloque_5;                                 //Prefab del bloque 5
     public Bloque Bloque_6;                                 //Prefab del bloque 6
 
-    List<GameObject> ListaPowerUps;
+    List<GameObject> ListaPowerUps;                         //Lista de los power ups de la escena.
     public GameObject PU_sumaPelotas1;                      //Prefab del powerup
     public GameObject PU_sumaPelotas2;                      //Prefab del powerup
     public GameObject PU_sumaPelotas3;                      //Prefab del powerup
@@ -93,12 +93,14 @@ public class LevelManager : MonoBehaviour
         Pausa = false;
 
         lectorNivel = GetComponentInChildren<LectorTXT>();
+        if (numeroNivelActual == 0) numeroNivelActual = 1;
         lectorNivel.LoadLevel(numeroNivelActual);
 
         ListaObjetosADestruir = new List<GameObject>();
         ListaPowerUps = new List<GameObject>();
 
         puntuacionMaxima = ListaBloques.Count * ListaBloques.Count * numeroNivelActual;
+
         //Le damos al CanvasManager la puntuacionMaxima para las estrellas
         CanvasManager.instance.SetMaxPuntuacion(puntuacionMaxima);
 
@@ -153,6 +155,7 @@ public class LevelManager : MonoBehaviour
                         shootLine.enabled = false;
                         numPelotasAct = 0;          //Establecemos el nº de pelotas en el tablero
                         spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
+                        spawner.gameObject.GetComponent<SpriteRenderer>().enabled = false;
 
                         puedeInstanciar = false;
                     }
@@ -162,7 +165,7 @@ public class LevelManager : MonoBehaviour
             {
                 //Sacar el mensaje de ¡Has ganado!
                 CanvasManager.instance.ActivaPanelGanador();
-                //Boton de continuar al menu o al siguiente nivel
+                
             }
         }
     }
@@ -220,11 +223,8 @@ public class LevelManager : MonoBehaviour
 
         //BAJAR LOS POWER UPS ACTIVOS
         foreach (GameObject PowerUp in ListaPowerUps)
-        {
-            Debug.Log(PowerUp.transform.position.y);
-            PowerUp.transform.position -= new Vector3(0, 1, 0);
-            Debug.Log(PowerUp.transform.position.y);
-
+        {           
+            PowerUp.transform.position -= new Vector3(0, 1, 0);    
         }
 
         //ACTUALIZA PUNTOS
@@ -358,7 +358,6 @@ public class LevelManager : MonoBehaviour
         {
             p.GoToSpawner(10, RestaPelota);
         }
-
     }
 
 
@@ -531,6 +530,7 @@ public class LevelManager : MonoBehaviour
         if (!llegadaPrimeraPelota)
         {
             llegadaPrimeraPelota = true;
+            spawner.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             spawnerPosition.x = pelota.gameObject.transform.position.x;
             spawner.ActualizaPosicionSpawner(spawnerPosition);
 

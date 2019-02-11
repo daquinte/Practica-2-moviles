@@ -70,6 +70,8 @@ public class CanvasManager : MonoBehaviour {
         textoPelotas.text = "Brillos: " + pelotasActuales;
     }
 
+    //Métodos de las puntuaciones
+    #region Puntuacion/
     /// <summary>
     /// Enciende las estrellas en función de la puntuación obtenida
     /// </summary>
@@ -103,7 +105,9 @@ public class CanvasManager : MonoBehaviour {
     {
         sliderPuntuacion.maxValue = maxValue;
     }
+    #endregion
 
+    #region paneles
     /// <summary>
     /// Establece el panel a los valores por defecto,
     /// tiene que ser llamado cuando quieras quitar los popup en "Panel_Cancelar" 
@@ -138,12 +142,14 @@ public class CanvasManager : MonoBehaviour {
         panelFinNiveles.SetActive(true);
     }
 
+    #endregion //Paneles
+
     //CALLBACKS DE LOS BOTONES
 
-      /// <summary>
-      /// Se llama desde el panel de nivel superado 
-      /// y te permite desbloquear y empezar el siguiente nivel
-      /// </summary>
+    /// <summary>
+    /// Se llama desde el panel de nivel superado 
+    /// y te permite desbloquear y empezar el siguiente nivel
+    /// </summary>
     public void IrAlSiguienteNivel()
     {
         LevelManager.instance.SiguienteNivel();
@@ -161,8 +167,6 @@ public class CanvasManager : MonoBehaviour {
     {
         LevelManager.instance.ReiniciaNivel();
     }
-
-
 
     public void Panel_Confirmacion()
     {

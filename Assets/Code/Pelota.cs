@@ -14,10 +14,11 @@ public class Pelota : MonoBehaviour {
         Physics2D.IgnoreLayerCollision(9, 9);         //Hace que las pelotas se ignoren (Todas están en layer 9)
     }
 
+    //TODO: Mirar lo del Fixed Update
     public void LaunchBall(Vector3 pos, Vector2 dir)
     {
         transform.position = pos;
-        GetComponent<Rigidbody2D>().velocity = dir * velocidad * Time.deltaTime;
+        GetComponent<Rigidbody2D>().velocity = dir * velocidad * Time.deltaTime * 1.5f;
 
         //Añadimos la pelota a la instancia de LevelManager
         LevelManager.instance.SumaPelota(this);

@@ -48,6 +48,9 @@ public class Spawner : MonoBehaviour {
     {
         for (int i = 0; i < numPelotas; i++)
         {
+            Debug.Log("He generado la pelota nº " + i);
+            yield return new WaitForSeconds(0.05f);
+
             Pelota nuevaPelota = Instantiate(pelotaPrefab);
             Vector2 dir = (targetPos).normalized;
 

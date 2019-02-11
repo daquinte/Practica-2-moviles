@@ -583,9 +583,25 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114633638375522364, guid: 5d7233f6e470222458b084bbc1f566da,
+        type: 2}
+      propertyPath: VueltaASpawner
+      value: 
+      objectReference: {fileID: 285702841}
+    - target: {fileID: 114529134331484112, guid: 5d7233f6e470222458b084bbc1f566da,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Recogida
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d7233f6e470222458b084bbc1f566da, type: 2}
   m_IsPrefabAsset: 0
+--- !u!114 &285702841 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114529134331484112, guid: 5d7233f6e470222458b084bbc1f566da,
+    type: 2}
+  m_PrefabInternal: {fileID: 285702840}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &307044626
 GameObject:
   m_ObjectHideFlags: 0
