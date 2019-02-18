@@ -9,12 +9,16 @@ public class canvasMenu : MonoBehaviour {
     //Botones menú
     public GameObject niveles;
     public GameObject botonesNiveles;
+
     public Text titulo;
     public Text estrellas;
+    public Text diamantes;
 
     private void Update()
     {
-        estrellas.text = "Estrellas totales: " + GameManager.instance.GetEstrellas();
+        estrellas.text = GameManager.instance.GetEstrellas().ToString();
+        diamantes.text = GameManager.instance.GetDiamantes().ToString();
+
     }
 
 

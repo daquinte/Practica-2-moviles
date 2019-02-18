@@ -17,7 +17,7 @@ public class CanvasManager : MonoBehaviour {
 
     //Textos
     public Text textoPuntuacion;
-    public Text textoRubies;
+    public Text textoDiamantes;
     public Text textoPago;
     public Text textoPagoInsuficiente;
     public Text textoPelotas;
@@ -64,7 +64,7 @@ public class CanvasManager : MonoBehaviour {
         textoPuntuacion.text = "Puntos: " + puntuacionAct;
         sliderPuntuacion.value = puntuacionAct;
 
-        textoRubies.text = "Rubies: " + GameManager.instance.GetRubies();
+        textoDiamantes.text = "Diamantes: " + GameManager.instance.GetDiamantes();
 
         int pelotasActuales = LevelManager.instance.GetPelotasSpawner();
         textoPelotas.text = "Brillos: " + pelotasActuales;
@@ -178,7 +178,7 @@ public class CanvasManager : MonoBehaviour {
     {
         
         
-        if (!GameManager.instance.RestaRubies(25))
+        if (!GameManager.instance.RestaDiamantes(25))
         {
             botonAceptarPago.gameObject.SetActive(false);
             botonCancelarPago.gameObject.SetActive(false);

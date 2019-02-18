@@ -15,7 +15,7 @@ using System.IO;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    public int Rubies;           //Moneda de pago
+    public int Diamantes;           //Moneda de pago
     int Estrellas;            //Moneda F2P
 
     bool[] nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 
-        Rubies = 100000;
+        if (Diamantes == 0) Diamantes = 1000;
         Estrellas = 0;
 
         nivelesAccesibles = new bool[10];
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/ProgresoJugador.dat");
 
-        PlayerData data = new PlayerData(Rubies, Estrellas, nivelesAccesibles, estrellasPorNivel, puntosPorNivel);
+        PlayerData data = new PlayerData(Diamantes, Estrellas, nivelesAccesibles, estrellasPorNivel, puntosPorNivel);
 
         //Serializamos data y lo guardamos en file
         bf.Serialize(file, data);
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
 
             //Esto hay que ponerlo mejor, es para la prueba!
             Estrellas = data._estrellas;
-            Rubies = data._rubies;
+            Diamantes = data._diamantes;
 
             for (int i = 0; i < 10; i++)
             {
@@ -119,14 +119,24 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Reset()
+    {
+        Estrellas = 0;
+        Diamantes = 9999;
+    }
+    
+
     //Datos que vamos a guardar en el .dat; Se podría hacer mejor.
     //Estos datos se tienen que serializar
     [System.Serializable]
     class PlayerData : System.Object
     {
-        public PlayerData(int rubies, int estrellas, bool[] niveles, int[] estrellasNivel, int[] puntosNivel)
+        public PlayerData(int Diamantes, int estrellas, bool[] niveles, int[] estrellasNivel, int[] puntosNivel)
         {
-            _rubies = rubies;
+            _diamantes = Diamantes;
             _estrellas = estrellas;
 
             _nivelesAccesibles = niveles;
@@ -135,7 +145,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        public int _rubies { get; set; }
+        public int _diamantes { get; set; }
         public int _estrellas { get; set; }
 
         public bool[] _nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
@@ -144,14 +154,14 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Resta num rubies al contador global de rubies del juego
+    /// Resta num Diamantes al contador global de Diamantes del juego
     /// </summary>
     /// <param name="num"></param>
-    public bool RestaRubies(int num)
+    public bool RestaDiamantes(int num)
     {
-        if (Rubies - num >= 0)
+        if (Diamantes - num >= 0)
         {
-            Rubies -= num;
+            Diamantes -= num;
             return true;
         }
 
@@ -160,8 +170,8 @@ public class GameManager : MonoBehaviour
 
     }
 
-    //GETTERS RUBIES Y ESTRELLAS
-    public int GetRubies() { return Rubies; }
+    //GETTERS Diamantes Y ESTRELLAS
+    public int GetDiamantes() { return Diamantes; }
     public int GetEstrellas() { return Estrellas; }
 
     public void SumaEstrellas(int nivel)
