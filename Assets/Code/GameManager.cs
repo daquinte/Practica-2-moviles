@@ -16,11 +16,13 @@ using System.IO;
 public class GameManager : MonoBehaviour
 {
     public int Diamantes;           //Moneda de pago
-    int Estrellas;            //Moneda F2P
+    int Estrellas;                  //Moneda F2P
 
     bool[] nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
     int[] estrellasPorNivel;                        //Guardas las estrellas por nivel
     int[] puntosPorNivel;                           //Guarda los puntos por nivel
+
+    int NumNiveles = 9;
 
     #region Singleton
     public static GameManager instance;
@@ -49,7 +51,7 @@ public class GameManager : MonoBehaviour
         Estrellas = 0;
 
         nivelesAccesibles = new bool[10];
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < NumNiveles; i++)
         {
             nivelesAccesibles[i] = false;
         }
@@ -58,7 +60,7 @@ public class GameManager : MonoBehaviour
         estrellasPorNivel = new int[10];
         puntosPorNivel = new int[10];
         //For para inicializar los vectores de estrellas y puntos
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < NumNiveles; i++)
         {
             estrellasPorNivel[i] = 0;
             puntosPorNivel[i] = 0;
@@ -120,12 +122,24 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Reset de los valores del GameManager al estado inicial
     /// </summary>
     public void Reset()
     {
         Estrellas = 0;
-        Diamantes = 9999;
+        Diamantes = 100;
+
+        for (int i = 0; i < NumNiveles; i++)
+        {
+            nivelesAccesibles[i] = false;
+        }
+        nivelesAccesibles[0] = true;
+
+        for (int i = 0; i < NumNiveles; i++)
+        {
+            estrellasPorNivel[i] = 0;
+            puntosPorNivel[i] = 0;
+        }
     }
     
 
@@ -170,6 +184,11 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void SumaDiamantes(int suma) 
+    {
+        Diamantes += suma;
+    }
+
     //GETTERS Diamantes Y ESTRELLAS
     public int GetDiamantes() { return Diamantes; }
     public int GetEstrellas() { return Estrellas; }
@@ -207,6 +226,17 @@ public class GameManager : MonoBehaviour
         Save();
         Debug.Log("He guardado el nivel " + (nivel - 1));
 
+    }
+
+    /// <summary>
+    /// Dado un nivel, devuelve si está bloqueado o no
+    /// </summary>
+    /// <param name="nivel"></param>
+    /// <returns></returns>
+    public bool NivelDesbloqueado(int nivel)
+    {
+        return nivelesAccesibles[nivel-1];
+        
     }
 
 }

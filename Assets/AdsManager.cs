@@ -5,6 +5,7 @@ using UnityEngine.Advertisements;
 public class AdsManager : MonoBehaviour
 {
     [SerializeField] string gameID = "42014";
+    public int RecompensaAnuncio = 10;
 
     void Awake()
     {
@@ -32,13 +33,11 @@ public class AdsManager : MonoBehaviour
         switch (result)
         {
             case ShowResult.Finished:
-                Debug.Log("Ad Finished. Rewarding player...");
+                GameManager.instance.SumaDiamantes(RecompensaAnuncio);
                 break;
             case ShowResult.Skipped:
-                Debug.Log("Ad skipped. Son, I am dissapointed in you");
                 break;
             case ShowResult.Failed:
-                Debug.Log("I swear this has never happened to me before");
                 break;
         }
     }

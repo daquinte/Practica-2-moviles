@@ -185,7 +185,7 @@ public class LevelManager : MonoBehaviour
         {
             ListaBloques[it].transform.position -= new Vector3(0, 1, 0);
 
-            if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 1)
+            if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 0)
             {
                 gameOver = true;
                 CanvasManager.instance.ActivaPanelPerdedor();

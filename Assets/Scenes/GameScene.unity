@@ -374,7 +374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puntuacionMaxima: 0
-  numMaxPelotas: 20
+  numMaxPelotas: 40
   PelotaPrefab: {fileID: 114240080353485636, guid: 86acbbc54f7fe794da9323b8478ec3e3,
     type: 2}
   Bloque_1: {fileID: 114061170840797566, guid: 58d59e590c2e3ee4eb6e30270134dfe4, type: 2}
@@ -1214,6 +1214,16 @@ Prefab:
       propertyPath: textoDiamantes
       value: 
       objectReference: {fileID: 1673116504}
+    - target: {fileID: 224255354807242912, guid: 5d7233f6e470222458b084bbc1f566da,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 46.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 224064651467924332, guid: 5d7233f6e470222458b084bbc1f566da,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -38.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d7233f6e470222458b084bbc1f566da, type: 2}
   m_IsPrefabAsset: 0
