@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(LectorTXT))]
 
@@ -145,15 +146,22 @@ public class LevelManager : MonoBehaviour
 
                 if (Input.GetMouseButtonUp(0) && puedeInstanciar)
                 {
+                    ///
                     //Si el raton está menos de -1 o más de 11 en la X
                     //O que no sea mayor que 1 y no sea menos que -13 en la Y
+                    //Y además, compruebas que no hayas pulsado en la UI
+                    ///
                     Vector3 mousePos = Input.mousePosition;
                     Vector2 touchPos = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y));
+
                     if ((touchPos.x >= bordeLateralIzquierdo && touchPos.x <= bordeLateralDerecho)
-                        && (touchPos.y >= bordeInferior && touchPos.y <= bordeSuperior))
+                        && (touchPos.y >= bordeInferior && touchPos.y <= bordeSuperior)
+                        && !EventSystem.current.IsPointerOverGameObject())
                     {
                         shootLine.enabled = false;
                         numPelotasAct = 0;          //Establecemos el nº de pelotas en el tablero
+
+                        //Disparo de las pelotas
                         spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
                         spawner.gameObject.GetComponent<SpriteRenderer>().enabled = false;
 
@@ -264,7 +272,6 @@ public class LevelManager : MonoBehaviour
                 }
 
                 i++;                            //Sumamos i 
-                Debug.Log("He metido un powerUp, el count es " + ListaPowerUps.Count);
 
             }
 
