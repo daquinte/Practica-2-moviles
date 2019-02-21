@@ -134,110 +134,117 @@ public class LevelManager : MonoBehaviour
 
         if (!gameOver && !Pausa)
         {
-            //Si no has ganado
-            if (ListaBloques.Count != 0)
+
+            //INPUT
+
+            if (Input.GetMouseButtonDown(0) && puedeInstanciar)
             {
-                //INPUT
-
-                if (Input.GetMouseButtonDown(0) && puedeInstanciar)
-                {
-                    shootLine.enabled = true;
-                }
-
-                if (Input.GetMouseButtonUp(0) && puedeInstanciar)
-                {
-                    ///
-                    //Si el raton está menos de -1 o más de 11 en la X
-                    //O que no sea mayor que 1 y no sea menos que -13 en la Y
-                    //Y además, compruebas que no hayas pulsado en la UI
-                    ///
-                    Vector3 mousePos = Input.mousePosition;
-                    Vector2 touchPos = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y));
-
-                    if ((touchPos.x >= bordeLateralIzquierdo && touchPos.x <= bordeLateralDerecho)
-                        && (touchPos.y >= bordeInferior && touchPos.y <= bordeSuperior)
-                        && !EventSystem.current.IsPointerOverGameObject())
-                    {
-                        shootLine.enabled = false;
-                        numPelotasAct = 0;          //Establecemos el nº de pelotas en el tablero
-
-                        //Disparo de las pelotas
-                        spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
-                        spawner.gameObject.GetComponent<SpriteRenderer>().enabled = false;
-
-                        puedeInstanciar = false;
-                    }
-                }
+                shootLine.enabled = true;
             }
-            else
+
+            if (Input.GetMouseButtonUp(0) && puedeInstanciar)
             {
-                //Sacar el mensaje de ¡Has ganado!
-                CanvasManager.instance.ActivaPanelGanador();
-                
+                ///
+                //Si el raton está menos de -1 o más de 11 en la X
+                //O que no sea mayor que 1 y no sea menos que -13 en la Y
+                //Y además, compruebas que no hayas pulsado en la UI
+                ///
+                Vector3 mousePos = Input.mousePosition;
+                Vector2 touchPos = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y));
+
+                if ((touchPos.x >= bordeLateralIzquierdo && touchPos.x <= bordeLateralDerecho)
+                    && (touchPos.y >= bordeInferior && touchPos.y <= bordeSuperior)
+                    && !EventSystem.current.IsPointerOverGameObject())
+                {
+                    shootLine.enabled = false;
+                    numPelotasAct = 0;          //Establecemos el nº de pelotas en el tablero
+
+                    //Disparo de las pelotas
+                    spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
+                    spawner.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
+                    puedeInstanciar = false;
+                }
             }
         }
+
     }
+
 
 
     #region Level Manager Methods
     /// <summary>
     ///Metodo encargado de situar el spawner en la nueva posición,
     ///de bajar todos los muros 1 posicion hacia abajo -> Y comprobar si se ha acabado la partida!
-    ///establecer puntos, nuevo numero max de pelotas y de algo más que no recuerdo ahora mismo.
+    ///establecer puntos, nuevo numero max de pelotas.
     /// </summary>
     private void PreparaSiguienteGameRound()
-    { 
-    
-        int it = 0;
-        while (!gameOver && it < ListaBloques.Count)
+    {
+        ///
+        //Compruebas si se ha acabado la partida,
+        //y si es asi sacas un mensaje de ¡Has ganado!
+
+        ///
+
+        if (ListaBloques.Count == 0)
         {
-            ListaBloques[it].transform.position -= new Vector3(0, 1, 0);
-
-            if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 0)
-            {
-                gameOver = true;
-                CanvasManager.instance.ActivaPanelPerdedor();
-            }
-            //Si algún bloque está lo suficientemente cerca del Spawner activamos el warning
-            else if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 4 && !warning.activeSelf)
-            {
-                warning.SetActive(true);
-            }
-
-            //Si estabas en peligro y dejas de estarlo, apaga el warning
-            else if (warning.activeSelf && (ListaBloques[it].transform.position.y - spawner.transform.position.y) > 4)
-            {
-                warning.SetActive(false);
-            }
-
-            it++;
+            CanvasManager.instance.ActivaPanelGanador();
         }
 
-        //ACTUALIZA SPAWNER
-        puedeInstanciar = true;
-        llegadaPrimeraPelota = false;
-
-        //ELIMINA LOS OBJETOS INNECESARIOS(Power ups)
-        if (ListaObjetosADestruir.Count != 0)
+        //Si no has ganado, preparas la siguiente ronda
+        else
         {
-            foreach (GameObject GO in ListaObjetosADestruir)
+            int it = 0;
+            while (!gameOver && it < ListaBloques.Count)
             {
-                Destroy(GO);
+                ListaBloques[it].transform.position -= new Vector3(0, 1, 0);
+
+                if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 0)
+                {
+                    gameOver = true;
+                    CanvasManager.instance.ActivaPanelPerdedor();
+                }
+                //Si algún bloque está lo suficientemente cerca del Spawner activamos el warning
+                else if ((ListaBloques[it].transform.position.y - spawner.transform.position.y) <= 4 && !warning.activeSelf)
+                {
+                    warning.SetActive(true);
+                }
+
+                //Si estabas en peligro y dejas de estarlo, apaga el warning
+                else if (warning.activeSelf && (ListaBloques[it].transform.position.y - spawner.transform.position.y) > 4)
+                {
+                    warning.SetActive(false);
+                }
+
+                it++;
             }
 
-            ListaObjetosADestruir.Clear();
+            //ACTUALIZA SPAWNER
+            puedeInstanciar = true;
+            llegadaPrimeraPelota = false;
+
+            //ELIMINA LOS OBJETOS INNECESARIOS(Power ups)
+            if (ListaObjetosADestruir.Count != 0)
+            {
+                foreach (GameObject GO in ListaObjetosADestruir)
+                {
+                    Destroy(GO);
+                }
+
+                ListaObjetosADestruir.Clear();
+            }
+
+
+            //BAJAR LOS POWER UPS ACTIVOS
+            foreach (GameObject PowerUp in ListaPowerUps)
+            {
+                PowerUp.transform.position -= new Vector3(0, 1, 0);
+            }
+
+            //ACTUALIZA PUNTOS
+            numPelotasAct = 0;
+            multiplicadorPuntuacion = 0;
         }
-
-
-        //BAJAR LOS POWER UPS ACTIVOS
-        foreach (GameObject PowerUp in ListaPowerUps)
-        {           
-            PowerUp.transform.position -= new Vector3(0, 1, 0);    
-        }
-
-        //ACTUALIZA PUNTOS
-        numPelotasAct = 0;
-        multiplicadorPuntuacion = 0;
     }
 
     /// <summary>
@@ -382,7 +389,7 @@ public class LevelManager : MonoBehaviour
         if (gameObject.GetComponent<PowerUpLaser>())
         {
             ListaPowerUps.Remove(gameObject);
-            
+
         }
     }
 
