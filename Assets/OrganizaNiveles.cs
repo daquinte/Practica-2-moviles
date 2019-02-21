@@ -27,8 +27,7 @@ public class OrganizaNiveles : MonoBehaviour {
 
 
 	// Use this for initialization
-
-        //TODO: INVESTIGAR POR QUÉ SE ROMPIÓ EL PUTO DESPLAZAMIENTO
+    
 	void Start () {
         
         for (float i = 0; i < NumFilas; i++)
@@ -43,9 +42,9 @@ public class OrganizaNiveles : MonoBehaviour {
 
                 //La posicion del botón viene dada por la fila en la que está, que es un movimiento en Y,
                 //y por lo lejos que está del botón inicial de la fila, que es un movimiento en X e Y
-                boton.transform.position += new Vector3(0, DesplazamientoFilaActual * 0.4f, 0);
-
-                boton.transform.position += new Vector3(DesplazamientoX * j  * 0.4f, DesplazamientoY * j * 0.4f, 0);
+                boton.transform.position += new Vector3(0, DesplazamientoFilaActual * 0.8f, 0);
+                //0.4f en ambos para windowed
+                boton.transform.position += new Vector3(DesplazamientoX * j  * 0.8f, DesplazamientoY * j * 0.8f, 0);
 
                 
                 //Ponemos la escala
@@ -71,7 +70,8 @@ public class OrganizaNiveles : MonoBehaviour {
         }
 
         //Movemos el panel de coleccionable
-        PanelColeccionables.transform.position += new Vector3(0, DesplazamientoFilaActual * 0.8f, 0);
+        //* 0.8f para windowed
+        PanelColeccionables.transform.position += new Vector3(0, DesplazamientoFilaActual * 1.7f, 0);
 
 
 	}
