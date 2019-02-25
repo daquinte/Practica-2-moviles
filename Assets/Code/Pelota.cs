@@ -24,6 +24,25 @@ public class Pelota : MonoBehaviour {
         LevelManager.instance.SumaPelota(this);
     }
 
+    //Acelera la pelota aplicandole una fuerza
+    public void Acelera()
+    {
+        //PROBLEMA QUE LE VEO A ESTO: ¿Como sabes la dirección hacia la que aplicarle la fuerza?
+        //Hay una forma que sería calcular la dirección sabiendo una posicion antigua de la pelota y luego restandola
+        //A la posicion actual= eso te da la dirección, que luego hay una vaina que haces InverseTransformDirection y aquello funciona
+        //Lo malo sería que todas las bolas tendrían que estar registrando en cada frame su posicion anterior.
+        //No es un drama, peeeero... 
+
+        /*
+            var direction = transform.position - lastPosition;
+            var localDirection = transform.InverseTransformDirection(direction);
+            lastPosition = transform.position;
+         */
+
+        //GetComponent<Rigidbody2D>().AddForce()
+    }
+
+
     /// <summary>
     /// Detiene la pelota y la lleva a la posición del spawner. 
     /// El desplazamiento lo hace durante time segundos.

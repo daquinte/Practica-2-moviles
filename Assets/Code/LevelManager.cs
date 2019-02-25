@@ -24,6 +24,8 @@ public class LevelManager : MonoBehaviour
 
     private int numeroEstrellas;
 
+    private float timerDoubleClick = 0.25f;                           //Tiempo para determinar un doble click.
+    private float lastClick;                                  //Tiempo del último click.
 
     public const int bordeLateralIzquierdo = -2;
     public const int bordeLateralDerecho = 12;
@@ -60,6 +62,7 @@ public class LevelManager : MonoBehaviour
     public Spawner spawner;                                 //Spawner del nivel
     bool llegadaPrimeraPelota;                              //Bool que determina si ha llegado la primera serpiente
     Vector3 spawnerPosition;                                //Posicion siguiente/actual del spawner
+
     bool puedeInstanciar;                                   //Determina si puede generar bolas o no
 
     public DeathZone deathZone;                             //Deathzone del nivel
@@ -136,12 +139,13 @@ public class LevelManager : MonoBehaviour
         {
 
             //INPUT
-
+            //Mouse button down = dibujar la linea
             if (Input.GetMouseButtonDown(0) && puedeInstanciar)
             {
                 shootLine.enabled = true;
             }
 
+            
             if (Input.GetMouseButtonUp(0) && puedeInstanciar)
             {
                 ///
@@ -166,6 +170,26 @@ public class LevelManager : MonoBehaviour
                     puedeInstanciar = false;
                 }
             }
+            //Si pulsas mientras haya pelotas en el tablero, buscamos si ha habido doble click
+            //Para acelerar la partida.
+            else if(Input.GetMouseButtonDown(0) && !puedeInstanciar)
+            {
+                if (Time.time - lastClick < timerDoubleClick)
+                {
+                    //double click
+                    Recogida();
+                    Debug.Log("doble click");
+                }
+                else
+                {
+                    //normal click
+                    Debug.Log("click");
+
+                }
+                lastClick = Time.time;
+            }
+
+            
         }
 
     }
@@ -371,6 +395,17 @@ public class LevelManager : MonoBehaviour
         foreach (Pelota p in ListaPelotas)
         {
             p.GoToSpawner(10, RestaPelota);
+        }
+    }
+
+    /// <summary>
+    /// Método que acelera las pelotas, aplicandole además una pequeña fuerza para modificar su trayectoria
+    /// </summary>
+    public void Acelerar()
+    {
+        foreach (Pelota p in ListaPelotas)
+        {
+            p.Acelera();
         }
     }
 
