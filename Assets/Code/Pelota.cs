@@ -51,6 +51,8 @@ public class Pelota : MonoBehaviour {
     /// <param name="callback">Función callback</param>
     public void GoToSpawner(float time, System.Action<Pelota> callback)
     {
+
+
         GetComponent<CircleCollider2D>().enabled = false;
         
         GetComponent<Rigidbody2D>().velocity = Vector3.zero;
@@ -79,7 +81,7 @@ public class Pelota : MonoBehaviour {
             yield return null;
         }
 
-        yield break;  //Detiene la corroutina
+        yield break;            //Detiene la corroutina
        
     }
 

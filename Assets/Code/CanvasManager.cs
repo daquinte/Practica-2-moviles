@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 
 public class CanvasManager : MonoBehaviour {
-   
 
+    //Sliders
     public Slider sliderPuntuacion;
 
     //Paneles
@@ -26,6 +26,8 @@ public class CanvasManager : MonoBehaviour {
     public Button botonAceptarPago;
     public Button botonCancelarPago;                    
     public Button botonAceptarGenerico;                 //Acepta la accion para desactivar el panel
+
+    public Button botonRegresarSpawner;                 //Boton para regresar las bolas
 
     //Estrellas
     public GameObject estrellaBase;
@@ -53,7 +55,7 @@ public class CanvasManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-  
+        setReturnSpawnActive(false);
     }
 	
 	// Update is called once per frame
@@ -161,6 +163,16 @@ public class CanvasManager : MonoBehaviour {
     /// </summary>
     public void IrAlMenuPrincipal() {
         LevelManager.instance.CargaMenuPrincipal();
+    }
+
+    /// <summary>
+    /// Activa y desactiva el botón del spawner
+    /// </summary>
+    public void setReturnSpawnActive(bool state)
+    {
+        botonRegresarSpawner.interactable = state;
+        botonRegresarSpawner.gameObject.SetActive(state);
+     
     }
 
     public void Reiniciar()

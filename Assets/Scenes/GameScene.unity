@@ -374,7 +374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puntuacionMaxima: 0
-  numMaxPelotas: 40
+  numMaxPelotas: 10
   PelotaPrefab: {fileID: 114240080353485636, guid: 86acbbc54f7fe794da9323b8478ec3e3,
     type: 2}
   Bloque_1: {fileID: 114061170840797566, guid: 58d59e590c2e3ee4eb6e30270134dfe4, type: 2}
@@ -983,6 +983,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PelotaPrefab: {fileID: 1585775854616638, guid: 86acbbc54f7fe794da9323b8478ec3e3,
     type: 2}
+--- !u!114 &978195377 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114529134331484112, guid: 5d7233f6e470222458b084bbc1f566da,
+    type: 2}
+  m_PrefabInternal: {fileID: 1816405793}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1279414408 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1865846477716852, guid: 5d7233f6e470222458b084bbc1f566da,
@@ -1223,6 +1229,15 @@ Prefab:
         type: 2}
       propertyPath: m_AnchoredPosition.y
       value: -38.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114633638375522364, guid: 5d7233f6e470222458b084bbc1f566da,
+        type: 2}
+      propertyPath: botonRegresarSpawner
+      value: 
+      objectReference: {fileID: 978195377}
+    - target: {fileID: 1563913896096586, guid: 5d7233f6e470222458b084bbc1f566da, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d7233f6e470222458b084bbc1f566da, type: 2}

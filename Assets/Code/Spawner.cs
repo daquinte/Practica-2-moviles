@@ -57,6 +57,8 @@ public class Spawner : MonoBehaviour {
 
             yield return null;
         }
+
+        CanvasManager.instance.setReturnSpawnActive(true);
         
         yield break;    //Stop coroutine
     }

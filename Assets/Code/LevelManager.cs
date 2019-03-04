@@ -165,7 +165,7 @@ public class LevelManager : MonoBehaviour
 
                     //Disparo de las pelotas
                     spawner.GeneraPelotas(numMaxPelotas, PelotaPrefab);
-                    spawner.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                    SetSpawnerVisible(false);
 
                     puedeInstanciar = false;
                 }
@@ -177,7 +177,7 @@ public class LevelManager : MonoBehaviour
                 if (Time.time - lastClick < timerDoubleClick)
                 {
                     //double click
-                    Recogida();
+                    //Recogida();
                     Debug.Log("doble click");
                 }
                 else
@@ -207,9 +207,7 @@ public class LevelManager : MonoBehaviour
         ///
         //Compruebas si se ha acabado la partida,
         //y si es asi sacas un mensaje de ¡Has ganado!
-
         ///
-
         if (ListaBloques.Count == 0)
         {
             CanvasManager.instance.ActivaPanelGanador();
@@ -269,6 +267,8 @@ public class LevelManager : MonoBehaviour
             numPelotasAct = 0;
             multiplicadorPuntuacion = 0;
         }
+
+        CanvasManager.instance.setReturnSpawnActive(false);
     }
 
     /// <summary>
@@ -391,6 +391,9 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public void Recogida()
     {
+        CanvasManager.instance.setReturnSpawnActive(false);
+        SetSpawnerVisible(true);
+
         //TODO: DESACTIVAR EL BOTON CUANDO LE DEMOS
         foreach (Pelota p in ListaPelotas)
         {
@@ -579,7 +582,7 @@ public class LevelManager : MonoBehaviour
         if (!llegadaPrimeraPelota)
         {
             llegadaPrimeraPelota = true;
-            spawner.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            SetSpawnerVisible(true);
             spawnerPosition.x = pelota.gameObject.transform.position.x;
             spawner.ActualizaPosicionSpawner(spawnerPosition);
 
@@ -603,6 +606,11 @@ public class LevelManager : MonoBehaviour
     public Vector3 GetSpawnerPosition()
     {
         return spawner.gameObject.transform.position;
+    }
+
+    public void SetSpawnerVisible(bool state)
+    {
+        spawner.gameObject.GetComponent<SpriteRenderer>().enabled = state;
     }
     #endregion
 
