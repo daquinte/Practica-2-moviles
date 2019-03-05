@@ -17,14 +17,14 @@ public class LevelManager : MonoBehaviour
 
     LectorTXT lectorNivel;
     bool gameOver;
-    public bool Pausa { get; set; }
-    public int puntuacionMaxima;                           //Limite de la barra. Si has llegado = 3 estrellas
-    private int puntuacionActual;
-    private int multiplicadorPuntuacion;
+    public bool   Pausa { get; set; }
+    public float  puntuacionMaxima;                           //Limite de la barra. Si has llegado = 3 estrellas
+    private float puntuacionActual;
+    private int   multiplicadorPuntuacion;
 
     private int numeroEstrellas;
 
-    private float timerDoubleClick = 0.25f;                           //Tiempo para determinar un doble click.
+    private float timerDoubleClick = 0.25f;                   //Tiempo para determinar un doble click.
     private float lastClick;                                  //Tiempo del último click.
 
     public const int bordeLateralIzquierdo = -2;
@@ -377,7 +377,7 @@ public class LevelManager : MonoBehaviour
     /*
     GETTERS
     */
-    public int GetPuntuacionActual() { return puntuacionActual; }
+    public float GetPuntuacionActual() { return puntuacionActual; }
     public int GetPelotasSpawner() { return (numMaxPelotas - numPelotasAct); }
     #endregion
 

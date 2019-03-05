@@ -6,14 +6,16 @@ using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour {
 
-    //Sliders
-    public Slider sliderPuntuacion;
 
     //Paneles
     public GameObject panelCompra;
     public GameObject panelGanador;
     public GameObject panelPerdedor;
     public GameObject panelFinNiveles;
+
+    //Puntos
+    public Image BarraPuntos;
+    public float PuntosMaximos;
 
     //Textos
     public Text textoPuntuacion;
@@ -61,12 +63,14 @@ public class CanvasManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Actualiza puntuacion
-        int puntuacionAct = LevelManager.instance.GetPuntuacionActual();
+        float puntuacionAct = LevelManager.instance.GetPuntuacionActual();
         EvaluaPuntuacion(puntuacionAct);
-        textoPuntuacion.text = "Puntos: " + puntuacionAct;
-        sliderPuntuacion.value = puntuacionAct;
+        textoPuntuacion.text = puntuacionAct.ToString();
+        BarraPuntos.fillAmount = (puntuacionAct/PuntosMaximos);
 
-        textoDiamantes.text = "Diamantes: " + GameManager.instance.GetDiamantes();
+        Debug.Log(BarraPuntos.fillAmount);
+
+        textoDiamantes.text = GameManager.instance.GetDiamantes().ToString();
 
         int pelotasActuales = LevelManager.instance.GetPelotasSpawner();
         textoPelotas.text = "Brillos: " + pelotasActuales;
@@ -77,7 +81,7 @@ public class CanvasManager : MonoBehaviour {
     /// <summary>
     /// Enciende las estrellas en función de la puntuación obtenida
     /// </summary>
-    private void EvaluaPuntuacion(int puntuacion)
+    private void EvaluaPuntuacion(float puntuacion)
     {
         if(puntuacion >= 50 && estrellaBase.GetComponent<Image>().sprite != estrellaConseguida)
         {
@@ -85,13 +89,13 @@ public class CanvasManager : MonoBehaviour {
             GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
         }
         //La puntuacion de la mitad la guardas aqui y la sacas de un get del LevelManager
-        if (puntuacion >= sliderPuntuacion.maxValue/2 && estrellaMedio.GetComponent<Image>().sprite != estrellaConseguida)
+        if (puntuacion >= PuntosMaximos/2 && estrellaMedio.GetComponent<Image>().sprite != estrellaConseguida)
         {
             estrellaMedio.GetComponent<Image>().sprite = estrellaConseguida;
             GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
         }
 
-        if (puntuacion >= sliderPuntuacion.maxValue && estrellaFinal.GetComponent<Image>().sprite != estrellaConseguida)
+        if (puntuacion >= PuntosMaximos && estrellaFinal.GetComponent<Image>().sprite != estrellaConseguida)
         {
             estrellaFinal.GetComponent<Image>().sprite = estrellaConseguida;
             GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
@@ -103,9 +107,9 @@ public class CanvasManager : MonoBehaviour {
     /// Método que es llamado para asignar la puntuacion máxima que quieres en el nivel
     /// </summary>
     /// <param name="maxValue"></param>
-    public void SetMaxPuntuacion(int maxValue)
+    public void SetMaxPuntuacion(float maxValue)
     {
-        sliderPuntuacion.maxValue = maxValue;
+        PuntosMaximos = maxValue;
     }
     #endregion
 
