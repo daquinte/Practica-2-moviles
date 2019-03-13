@@ -68,7 +68,6 @@ public class CanvasManager : MonoBehaviour {
         textoPuntuacion.text = puntuacionAct.ToString();
         BarraPuntos.fillAmount = (puntuacionAct/PuntosMaximos);
 
-        Debug.Log(BarraPuntos.fillAmount);
 
         textoDiamantes.text = GameManager.instance.GetDiamantes().ToString();
 
