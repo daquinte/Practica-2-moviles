@@ -96,12 +96,14 @@ public class LevelManager : MonoBehaviour
         gameOver = false;
         Pausa = false;
 
+        ListaObjetosADestruir = new List<GameObject>();
+        ListaPowerUps = new List<GameObject>();
+
         lectorNivel = GetComponentInChildren<LectorTXT>();
         if (numeroNivelActual == 0) numeroNivelActual = 1;
         lectorNivel.LoadLevel(numeroNivelActual);
-
-        ListaObjetosADestruir = new List<GameObject>();
-        ListaPowerUps = new List<GameObject>();
+   
+        Debug.Log(ListaPowerUps);
 
         puntuacionMaxima = ListaBloques.Count * ListaBloques.Count * numeroNivelActual;
 
@@ -444,10 +446,13 @@ public class LevelManager : MonoBehaviour
         {
             case 7: //Laser horizontal
                 powerUp = Instantiate(PU_Laser_Horizontal, new Vector3(x, y, 0), Quaternion.identity);
+                Debug.Log("HORIZONTAL: " + powerUp);
+                // NULL Debug.Log(ListaPowerUps);
                 ListaPowerUps.Add(powerUp); //Metemos el powerup en la lista
                 break;
             case 8: //Laser vertical
                 powerUp = Instantiate(PU_Laser_Vertical, new Vector3(x, y, 0), Quaternion.identity);
+                Debug.Log("VERTICAL: " + powerUp);
                 ListaPowerUps.Add(powerUp);
                 break;
             case 21:
