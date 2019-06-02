@@ -76,7 +76,7 @@ public class CanvasManager : MonoBehaviour {
     }
 
     //Métodos de las puntuaciones
-    #region Puntuacion/
+    #region Puntuacion
     /// <summary>
     /// Enciende las estrellas en función de la puntuación obtenida
     /// </summary>
