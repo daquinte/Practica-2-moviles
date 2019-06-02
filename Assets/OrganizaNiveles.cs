@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OrganizaNiveles : MonoBehaviour {
+public class OrganizaNiveles : MonoBehaviour
+{
 
     //Boton
-    public Button botonNivel;                   //Prefab del botón. Contiene la primera posición.
- 
-    public Canvas canvas;                       //Canvas del que son hijos todos los botones
-    public GameObject estrellas;                //Objeto que tiene 3 estrellas
-    public GameObject PanelColeccionables;      //Panel de objetivos
+    public GameObject botonNivel;                           //Prefab del botón. Contiene la primera posición.
+
+    public Canvas canvas;                               //Canvas del que son hijos todos los botones
+    public GameObject PanelColeccionables;              //Panel de objetivos
 
 
     //Ints para la organización del menú
@@ -20,48 +20,56 @@ public class OrganizaNiveles : MonoBehaviour {
     private float DesplazamientoFila = 180.0f;           //Desplazamiento que hacemos cada 3 iteraciones
     private float DesplazamientoFilaActual = 0.0f;
 
+    private EnciendeEstrellasMenu estrellasMenu;             //Clase que se encarga de encender estrellas
+
+
     private int NivelActual = 1;
 
-    public int NumFilas = 3; 
+    public int NumFilas = 3;
 
 
 
-	// Use this for initialization
-    
-	void Start () {
+    // Use this for initialization
+
+    void Start()
+    {
         for (float i = 0; i < NumFilas; i++)
         {
             DesplazamientoFilaActual = DesplazamientoFila * i;
-          
-
             for (float j = 0; j < 3; j++)
             {
-
-                Button boton = Instantiate(botonNivel, gameObject.transform);
-          
-                Debug.Log(boton.transform.position);
+                GameObject boton = Instantiate(botonNivel, gameObject.transform);
 
                 //La posicion del botón viene dada por la fila en la que está, que es un movimiento en Y,
                 //y por lo lejos que está del botón inicial de la fila, que es un movimiento en X e Y
-
                 boton.transform.localPosition += new Vector3(DesplazamientoX * j, DesplazamientoY * j + DesplazamientoFilaActual, 0);
-
                 boton.name = NivelActual.ToString();
                 boton.GetComponentInChildren<Text>().text = "Nivel " + NivelActual.ToString();
-
                 boton.gameObject.SetActive(true);
 
                 //preguntas si está bloqueado
                 //si está, pones el candado
                 if (!GameManager.instance.NivelDesbloqueado(NivelActual))
                 {
-                    boton.interactable = false; 
-                    StartCoroutine(FadeImage( true, boton.GetComponent<Image>()));
+                    boton.GetComponent<Button>().interactable = false;
+                    StartCoroutine(FadeImage(true, boton.GetComponent<Image>()));
+                }
+                //Si no está bloqueado, miras a ver cuantas estrellas tiene
+                else
+                {
+                    Debug.Log("pium");
+                    estrellasMenu = boton.GetComponentInChildren<EnciendeEstrellasMenu>();
+                    if (estrellasMenu != null)
+                    {
+                        Debug.Log("PINTAESTRELLAS");
+                        int estrellas = GameManager.instance.GetEstrellasDelNivel(NivelActual);
+                        estrellasMenu.EnciendeEstrellas(estrellas);
+                    }
                 }
 
- 
+
                 NivelActual++;
-               
+
             }
         }
 
@@ -70,7 +78,7 @@ public class OrganizaNiveles : MonoBehaviour {
         //PanelColeccionables.transform.position += new Vector3(0, DesplazamientoFilaActual * 1.7f, 0);
 
 
-	}
+    }
 
     /// <summary>
     /// Corroutine that fades an object in or out

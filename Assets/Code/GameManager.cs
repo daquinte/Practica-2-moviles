@@ -193,6 +193,8 @@ public class GameManager : MonoBehaviour
     public int GetDiamantes() { return Diamantes; }
     public int GetEstrellas() { return Estrellas; }
 
+    public int GetEstrellasDelNivel(int nivel) { return estrellasPorNivel[nivel - 1]; }
+
     public void SumaEstrellas(int nivel)
     {
         
