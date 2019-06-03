@@ -18,7 +18,7 @@ Tras cada disparo los bloques que no hayan sido destruídos descienden una posic
 - [ ] Las etiquetas del número de golpeos pendientes de los bloques no quedan bien colocadas.
 - [ ] El disparador es extraño. A veces no detecta que se suelta, y se queda la línea activada erróneamente.
 - [X] Se pierde antes de tiempo. La fila justo por encima del punto de disparo es válida para los bloques.
-- [ ] El ancho del tablero es mayor que el del juego original. Si una fila está llena de tiles, no debía haber hueco en los laterales para que las bolas entraran.
+- [X] El ancho del tablero es mayor que el del juego original. Si una fila está llena de tiles, no debía haber hueco en los laterales para que las bolas entraran. Solo pasa en el primer nivel, es intencionado.
 - [X] El número de bolas que se dispara es muy bajo.
 - [ ] El cálculo de la dirección de disparo no es muy fino. La línea no sale en el punto de pulsación.
 - [X] El GUI de selección de nivel está hecho a mano. Con los mapas en datos que pueden crecer arbitrariamente, poner una restricción así es muy mala idea (aparte de que el GUI es un caos y no se sabe cuáles están bloqueados y cuáles no).
@@ -29,3 +29,4 @@ Tras cada disparo los bloques que no hayan sido destruídos descienden una posic
 - [X] No es bueno avisar de los singleton. ¿Seguro que necesitáis tantos?
 - [X] PowerUpLaserVertical y PowerUpLaserHorizontal son iguales salvo por una pequeñez. Debería haber sido una única clase.
 - [X] Se debe minimizar el uso de Update() y FixedUpdate(). Dejar esos métodos vacíos es muy mal síntoma. 
+ 
