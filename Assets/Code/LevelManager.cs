@@ -105,7 +105,7 @@ public class LevelManager : MonoBehaviour
    
         Debug.Log(ListaPowerUps);
 
-        puntuacionMaxima = ListaBloques.Count * ListaBloques.Count * numeroNivelActual;
+        puntuacionMaxima = Mathf.Pow(ListaBloques.Count,2) * numeroNivelActual;
 
         //Le damos al CanvasManager la puntuacionMaxima para las estrellas
         CanvasManager.instance.SetMaxPuntuacion(puntuacionMaxima);
@@ -318,6 +318,32 @@ public class LevelManager : MonoBehaviour
     {
         puntuacionActual += multiplicadorPuntuacion;
         multiplicadorPuntuacion += 10;
+        EvaluaPuntuacion(puntuacionActual);
+    }
+
+    /// <summary>
+    /// Enciende las estrellas en función de la puntuación obtenida
+    /// </summary>
+    public void EvaluaPuntuacion(float puntuacion)
+    {
+        if (puntuacion >= 50 && numeroEstrellas == 0)
+        {
+            numeroEstrellas = 1;      
+        }
+        if (puntuacion >= (puntuacionMaxima / 2) && numeroEstrellas <= 1)
+        {
+            numeroEstrellas = 2;           
+        }
+        if (puntuacion >= puntuacionMaxima && numeroEstrellas <= 2)
+        {
+            numeroEstrellas = 3;  
+        }
+
+        CanvasManager.instance.EnciendeEstrella(numeroEstrellas);
+        if (GameManager.instance.GetEstrellasDelNivel(numeroNivelActual) < numeroEstrellas)
+        {
+            GameManager.instance.SumaEstrellas(numeroNivelActual);
+        }
     }
 
 
@@ -396,7 +422,7 @@ public class LevelManager : MonoBehaviour
         CanvasManager.instance.setReturnSpawnActive(false);
         SetSpawnerVisible(true);
 
-        //TODO: DESACTIVAR EL BOTON CUANDO LE DEMOS
+        
         foreach (Pelota p in ListaPelotas)
         {
             p.GoToSpawner(10, RestaPelota);
@@ -569,6 +595,7 @@ public class LevelManager : MonoBehaviour
 
         Destroy(pelotaQuitada.gameObject);
 
+        //TODO: BOOL AQUI PARA DETERMINAR SI NO SE HA LLAMADO ANTES
 
         if (numPelotasAct <= 0) //Si han llegado todas las pelotas
         {

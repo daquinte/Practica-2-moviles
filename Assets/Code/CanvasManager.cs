@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class CanvasManager : MonoBehaviour {
-
+public class CanvasManager : MonoBehaviour
+{
 
     //Paneles
     public GameObject panelCompra;
@@ -26,12 +26,13 @@ public class CanvasManager : MonoBehaviour {
 
     //Botones
     public Button botonAceptarPago;
-    public Button botonCancelarPago;                    
+    public Button botonCancelarPago;
     public Button botonAceptarGenerico;                 //Acepta la accion para desactivar el panel
 
     public Button botonRegresarSpawner;                 //Boton para regresar las bolas
 
     //Estrellas
+    private GameObject[] estrellasJuego;
     public GameObject estrellaBase;
     public GameObject estrellaMedio;
     public GameObject estrellaFinal;
@@ -56,17 +57,23 @@ public class CanvasManager : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         setReturnSpawnActive(false);
+
+        estrellasJuego = new GameObject[3];
+        estrellasJuego[0] = estrellaBase;
+        estrellasJuego[1] = estrellaMedio;
+        estrellasJuego[2] = estrellaFinal;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         //Actualiza puntuacion
         float puntuacionAct = LevelManager.instance.GetPuntuacionActual();
-        EvaluaPuntuacion(puntuacionAct);
         textoPuntuacion.text = puntuacionAct.ToString();
-        BarraPuntos.fillAmount = (puntuacionAct/PuntosMaximos);
+        BarraPuntos.fillAmount = (puntuacionAct / PuntosMaximos);
 
 
         textoDiamantes.text = GameManager.instance.GetDiamantes().ToString();
@@ -77,29 +84,18 @@ public class CanvasManager : MonoBehaviour {
 
     //Métodos de las puntuaciones
     #region Puntuacion
+
+   
     /// <summary>
-    /// Enciende las estrellas en función de la puntuación obtenida
+    /// Enciende la estrella nEstrella en la interfaz
     /// </summary>
-    private void EvaluaPuntuacion(float puntuacion)
+    /// <param name="nEstrella"></param>
+    public void EnciendeEstrella(int nEstrella)
     {
-        if(puntuacion >= 50 && estrellaBase.GetComponent<Image>().sprite != estrellaConseguida)
+       for(int i = 0; i < nEstrella; i++)
         {
-            estrellaBase.GetComponent<Image>().sprite = estrellaConseguida;
-            GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
+            estrellasJuego[i].GetComponent<Image>().sprite = estrellaConseguida;
         }
-        //La puntuacion de la mitad la guardas aqui y la sacas de un get del LevelManager
-        if (puntuacion >= PuntosMaximos/2 && estrellaMedio.GetComponent<Image>().sprite != estrellaConseguida)
-        {
-            estrellaMedio.GetComponent<Image>().sprite = estrellaConseguida;
-            GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
-        }
-
-        if (puntuacion >= PuntosMaximos && estrellaFinal.GetComponent<Image>().sprite != estrellaConseguida)
-        {
-            estrellaFinal.GetComponent<Image>().sprite = estrellaConseguida;
-            GameManager.instance.SumaEstrellas(LevelManager.numeroNivelActual);
-        }
-
     }
 
     /// <summary>
@@ -164,7 +160,8 @@ public class CanvasManager : MonoBehaviour {
     /// Método que te permite cargar la escena del menu principal
     /// desde cualquier otra
     /// </summary>
-    public void IrAlMenuPrincipal() {
+    public void IrAlMenuPrincipal()
+    {
         LevelManager.instance.CargaMenuPrincipal();
     }
 
@@ -175,7 +172,7 @@ public class CanvasManager : MonoBehaviour {
     {
         botonRegresarSpawner.interactable = state;
         botonRegresarSpawner.gameObject.SetActive(state);
-     
+
     }
 
     public void Reiniciar()
@@ -191,8 +188,8 @@ public class CanvasManager : MonoBehaviour {
 
     public void Panel_Aceptar()
     {
-        
-        
+
+
         if (!GameManager.instance.RestaDiamantes(25))
         {
             botonAceptarPago.gameObject.SetActive(false);

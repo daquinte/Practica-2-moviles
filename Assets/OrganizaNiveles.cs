@@ -56,28 +56,17 @@ public class OrganizaNiveles : MonoBehaviour
                 }
                 //Si no está bloqueado, miras a ver cuantas estrellas tiene
                 else
-                {
-                    Debug.Log("pium");
+                {               
                     estrellasMenu = boton.GetComponentInChildren<EnciendeEstrellasMenu>();
                     if (estrellasMenu != null)
-                    {
-                        Debug.Log("PINTAESTRELLAS");
+                    {                 
                         int estrellas = GameManager.instance.GetEstrellasDelNivel(NivelActual);
                         estrellasMenu.EnciendeEstrellas(estrellas);
                     }
                 }
-
-
                 NivelActual++;
-
             }
         }
-
-        //Movemos el panel de coleccionable
-        //* 0.8f para windowed
-        //PanelColeccionables.transform.position += new Vector3(0, DesplazamientoFilaActual * 1.7f, 0);
-
-
     }
 
     /// <summary>
