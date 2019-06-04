@@ -40,6 +40,7 @@ public class CanvasManager : MonoBehaviour
 
     //Sprites
     public Sprite estrellaConseguida;
+    public SpriteRenderer avanceRapido;
 
     public static CanvasManager instance;
 
@@ -75,7 +76,6 @@ public class CanvasManager : MonoBehaviour
         textoPuntuacion.text = puntuacionAct.ToString();
         BarraPuntos.fillAmount = (puntuacionAct / PuntosMaximos);
 
-
         textoDiamantes.text = GameManager.instance.GetDiamantes().ToString();
 
         int pelotasActuales = LevelManager.instance.GetPelotasSpawner();
@@ -85,17 +85,36 @@ public class CanvasManager : MonoBehaviour
     //Métodos de las puntuaciones
     #region Puntuacion
 
-   
+
     /// <summary>
     /// Enciende la estrella nEstrella en la interfaz
     /// </summary>
     /// <param name="nEstrella"></param>
     public void EnciendeEstrella(int nEstrella)
     {
-       for(int i = 0; i < nEstrella; i++)
+        for (int i = 0; i < nEstrella; i++)
         {
             estrellasJuego[i].GetComponent<Image>().sprite = estrellaConseguida;
         }
+    }
+
+    //Efecto visual para el icono de avance
+    public void ParpadeaIconoAvance()
+    {
+        StartCoroutine(Parpadeo());
+    }
+    //Parpadea la imagen
+    IEnumerator Parpadeo()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            avanceRapido.color = new Color(avanceRapido.color.r, avanceRapido.color.g, avanceRapido.color.b, 1);
+            yield return new WaitForSeconds(0.2f);
+            avanceRapido.color = new Color(avanceRapido.color.r, avanceRapido.color.g, avanceRapido.color.b, 0);
+            yield return new WaitForSeconds(0.2f);
+        }
+    
+        yield break;
     }
 
     /// <summary>
@@ -105,6 +124,7 @@ public class CanvasManager : MonoBehaviour
     public void SetMaxPuntuacion(float maxValue)
     {
         PuntosMaximos = maxValue;
+        Debug.Log("PUNTOS MAXIMOS: " + PuntosMaximos);
     }
     #endregion
 

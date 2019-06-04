@@ -34,7 +34,6 @@ public class EnciendeEstrellasMenu : MonoBehaviour {
     {
         if (estrellas == null) Init();
 
-        Debug.Log(nEstrellas);
         for(int i = 0; i < nEstrellas; i++)
         {
             estrellas[i].sprite = estrellaEncendida;
