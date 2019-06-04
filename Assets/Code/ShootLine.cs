@@ -21,6 +21,7 @@ public class ShootLine : MonoBehaviour {
 
         // Update position of the two vertex of the Line Renderer
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
         line.SetPosition(0, mousePos);
         line.SetPosition(1, Spawner.transform.position);

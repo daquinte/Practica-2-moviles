@@ -31,6 +31,7 @@ public class PU_SumaBolas : MonoBehaviour {
         if (aux != null)
         {
             LevelManager.instance.SumaPelotasAlNumeroMaximo(bolasQueSuma);
+            LevelManager.instance.InsertaObjetoParaEliminar(gameObject);
             Destroy(this.gameObject);
         }
     }

@@ -60,6 +60,7 @@ public class LevelManager : MonoBehaviour
 
 
     public Spawner spawner;                                 //Spawner del nivel
+    public LineRenderer shootLine;                          //Marca la trayectoria de disparo
     bool llegadaPrimeraPelota;                              //Bool que determina si ha llegado la primera serpiente
     Vector3 spawnerPosition;                                //Posicion siguiente/actual del spawner
 
@@ -68,7 +69,7 @@ public class LevelManager : MonoBehaviour
     public DeathZone deathZone;                             //Deathzone del nivel
     public GameObject warning;                              //Warning de que estás a punto de morir
 
-    LineRenderer shootLine;                                 //Marca la trayectoria de disparo
+   
 
 
     #endregion
@@ -106,7 +107,7 @@ public class LevelManager : MonoBehaviour
 
         Debug.Log(ListaPowerUps);
 
-        puntuacionMaxima = ListaBloques.Count * numeroNivelActual * 50;
+        puntuacionMaxima = ListaBloques.Count * numeroNivelActual * 20;
 
         //Le damos al CanvasManager la puntuacionMaxima para las estrellas
         CanvasManager.instance.SetMaxPuntuacion(puntuacionMaxima);
@@ -145,7 +146,7 @@ public class LevelManager : MonoBehaviour
             //Mouse button down = dibujar la linea
             if (Input.GetMouseButtonDown(0) && puedeInstanciar)
             {
-                shootLine.enabled = true;
+                shootLine.gameObject.SetActive(true);
             }
 
 
@@ -163,7 +164,7 @@ public class LevelManager : MonoBehaviour
                     && (touchPos.y >= bordeInferior && touchPos.y <= bordeSuperior)
                     && !EventSystem.current.IsPointerOverGameObject())
                 {
-                    shootLine.enabled = false;
+                    shootLine.gameObject.SetActive(false);
                     numPelotasAct = 0;          //Establecemos el nº de pelotas en el tablero
 
                     //Disparo de las pelotas
@@ -181,9 +182,11 @@ public class LevelManager : MonoBehaviour
                 {
                     //double click
                     Acelerar();
+                   
                 }
+                lastClick = Time.time;
             }
-            lastClick = Time.time;
+            
         }
     }
 
@@ -332,15 +335,15 @@ public void SumaPuntos()
 /// </summary>
 public void EvaluaPuntuacion(float puntuacion)
 {
-    if (puntuacion >= 50 && numeroEstrellas == 0)
+    if (puntuacion >= 10 && numeroEstrellas == 0)
     {
         numeroEstrellas = 1;
     }
-    if (puntuacion >= (puntuacionMaxima / 2) && numeroEstrellas <= 1)
+    if (puntuacion >= puntuacionMaxima * 0.7f && numeroEstrellas == 1)
     {
         numeroEstrellas = 2;
     }
-    if (puntuacion >= puntuacionMaxima && numeroEstrellas <= 2)
+    if (puntuacion >= puntuacionMaxima && numeroEstrellas == 2)
     {
         numeroEstrellas = 3;
     }
@@ -405,6 +408,12 @@ GETTERS
 */
 public float GetPuntuacionActual() { return puntuacionActual; }
 public int GetPelotasSpawner() { return (numMaxPelotas - numPelotasAct); }
+
+/// <summary>
+/// Devuelve true si no puedes instanciar pelotas, lo que implica un juego en curso.
+/// </summary>
+/// <returns></returns>
+public bool IsGamePlaying() { return !puedeInstanciar; }
 #endregion
 
 
@@ -444,16 +453,19 @@ public void Acelerar()
 /// Idealmente se usa para powerup de laser.
 /// </summary>
 /// <param name="gameObject">Objeto a eliminar</param>
-void InsertaObjetoParaEliminar(GameObject gameObject)
+public void InsertaObjetoParaEliminar(GameObject gameObject)
 {
-    ListaObjetosADestruir.Add(gameObject);
-
+   
     if (gameObject.GetComponent<PowerUpLaser>())
-    {
-        ListaPowerUps.Remove(gameObject);
-
+    {       
+        ListaObjetosADestruir.Add(gameObject);
     }
+        ListaPowerUps.Remove(gameObject);
 }
+
+
+
+
 
 //Métodos propios de los power ups
 #region Power Up Methods

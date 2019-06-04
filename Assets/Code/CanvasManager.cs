@@ -92,10 +92,7 @@ public class CanvasManager : MonoBehaviour
     /// <param name="nEstrella"></param>
     public void EnciendeEstrella(int nEstrella)
     {
-        for (int i = 0; i < nEstrella; i++)
-        {
-            estrellasJuego[i].GetComponent<Image>().sprite = estrellaConseguida;
-        }
+        estrellasJuego[nEstrella - 1].GetComponent<Image>().sprite = estrellaConseguida;
     }
 
     //Efecto visual para el icono de avance
@@ -113,7 +110,7 @@ public class CanvasManager : MonoBehaviour
             avanceRapido.color = new Color(avanceRapido.color.r, avanceRapido.color.g, avanceRapido.color.b, 0);
             yield return new WaitForSeconds(0.2f);
         }
-    
+
         yield break;
     }
 
@@ -195,18 +192,24 @@ public class CanvasManager : MonoBehaviour
 
     }
 
+    //Reinicia el nivel
     public void Reiniciar()
     {
         LevelManager.instance.ReiniciaNivel();
     }
 
+    //Panel de confirmacion de compra. Si no estas jugando, se muestra al jugador
     public void Panel_Confirmacion()
     {
-        panelCompra.SetActive(true);
-        LevelManager.instance.Pausa = true;
+        if (!LevelManager.instance.IsGamePlaying())
+        {
+            panelCompra.SetActive(true);
+            LevelManager.instance.Pausa = true;
+        }
     }
 
-    public void Panel_Aceptar()
+    //Comprueba si tienes diamantes suficientes y gestiona el cobro
+    public void Panel_AceptarPago()
     {
 
 
@@ -220,11 +223,12 @@ public class CanvasManager : MonoBehaviour
         }
         else
         {
-            //LLamar al levelManager para que active el power up
 
+            //LLamar al levelManager para que active el power up
             LevelManager.instance.ColocaPowerUpLasers(4);
             panelCompra.SetActive(false);
             LevelManager.instance.Pausa = false;
+
         }
     }
 
