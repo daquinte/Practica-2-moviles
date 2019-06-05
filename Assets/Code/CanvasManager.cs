@@ -98,6 +98,7 @@ public class CanvasManager : MonoBehaviour
     //Efecto visual para el icono de avance
     public void ParpadeaIconoAvance()
     {
+       
         StartCoroutine(Parpadeo());
     }
     //Parpadea la imagen
@@ -105,6 +106,7 @@ public class CanvasManager : MonoBehaviour
     {
         for (int i = 0; i < 2; i++)
         {
+            //Igual hacerlo con setActive y no active es mas elegante, el color no tiene sentido si no vas a hacer fade gilipollas :)))
             avanceRapido.color = new Color(avanceRapido.color.r, avanceRapido.color.g, avanceRapido.color.b, 1);
             yield return new WaitForSeconds(0.2f);
             avanceRapido.color = new Color(avanceRapido.color.r, avanceRapido.color.g, avanceRapido.color.b, 0);
@@ -189,7 +191,7 @@ public class CanvasManager : MonoBehaviour
     {
         botonRegresarSpawner.interactable = state;
         botonRegresarSpawner.gameObject.SetActive(state);
-
+        GlowButton(botonRegresarSpawner);
     }
 
     //Reinicia el nivel
@@ -237,6 +239,47 @@ public class CanvasManager : MonoBehaviour
         SetPanelToDefault();
         panelCompra.SetActive(false);
         LevelManager.instance.Pausa = false;
+    }
+
+    public void GlowButton(Button Boton)
+    {
+        StartCoroutine(Glow(Boton));
+
+    }
+
+    IEnumerator Glow(Button Boton)
+    {
+
+        yield return new WaitForSeconds(1);
+
+        ColorBlock colorB = botonRegresarSpawner.colors;
+        Color original = colorB.normalColor;
+
+        while (botonRegresarSpawner.gameObject.activeSelf)
+        {
+
+            for (float i = original.g; i >= original.g / 2; i -= Time.deltaTime * 0.4f)
+            {
+                //colorB = botonRegresarSpawner.GetComponent<Button>().colors;
+                colorB.normalColor = new Color(original.r, i, original.b, 1);
+                botonRegresarSpawner.colors = colorB;
+                yield return null;
+
+            }
+
+            for (float i = original.g / 2; i <= original.g; i += Time.deltaTime * 0.4f)
+            {
+                //colorB = botonRegresarSpawner.GetComponent<Button>().colors;
+                colorB.normalColor = new Color(original.r, i, original.b, 1);
+                botonRegresarSpawner.colors = colorB;
+                yield return null;
+            }
+        }
+
+        colorB.normalColor = original;
+        botonRegresarSpawner.colors = colorB;
+
+        yield break; //Stop coroutine
     }
 
 }

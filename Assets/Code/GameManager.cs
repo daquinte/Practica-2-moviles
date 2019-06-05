@@ -50,15 +50,15 @@ public class GameManager : MonoBehaviour
         if (Diamantes == 0) Diamantes = 1000;
         Estrellas = 0;
 
-        nivelesAccesibles = new bool[10];
+        nivelesAccesibles = new bool[NumNiveles+1];
         for (int i = 0; i < NumNiveles; i++)
         {
             nivelesAccesibles[i] = false;
         }
         nivelesAccesibles[0] = true;
 
-        estrellasPorNivel = new int[10];
-        puntosPorNivel = new int[10];
+        estrellasPorNivel = new int[NumNiveles+1];
+        puntosPorNivel = new int[NumNiveles+1];
         //For para inicializar los vectores de estrellas y puntos
         for (int i = 0; i < NumNiveles; i++)
         {
@@ -107,7 +107,6 @@ public class GameManager : MonoBehaviour
             PlayerData data = (PlayerData)bf.Deserialize(file);
             file.Close();
 
-            //Esto hay que ponerlo mejor, es para la prueba!
             Estrellas = data._estrellas;
             Diamantes = data._diamantes;
 

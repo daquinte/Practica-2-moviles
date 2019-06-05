@@ -60,7 +60,7 @@ public class LevelManager : MonoBehaviour
 
 
     public Spawner spawner;                                 //Spawner del nivel
-    public LineRenderer shootLine;                          //Marca la trayectoria de disparo
+    public ShootLine shootLine;                          //Marca la trayectoria de disparo
     bool llegadaPrimeraPelota;                              //Bool que determina si ha llegado la primera serpiente
     Vector3 spawnerPosition;                                //Posicion siguiente/actual del spawner
 
@@ -124,8 +124,6 @@ public class LevelManager : MonoBehaviour
 
         ListaPelotas = new List<Pelota>();
 
-        shootLine = GetComponentInChildren<LineRenderer>();
-
         if (numMaxPelotas == 0)
         {
             numMaxPelotas = 100;         //Valor inicial
@@ -146,7 +144,7 @@ public class LevelManager : MonoBehaviour
             //Mouse button down = dibujar la linea
             if (Input.GetMouseButtonDown(0) && puedeInstanciar)
             {
-                shootLine.gameObject.SetActive(true);
+                shootLine.SetLineActive(true);
             }
 
 
@@ -164,7 +162,7 @@ public class LevelManager : MonoBehaviour
                     && (touchPos.y >= bordeInferior && touchPos.y <= bordeSuperior)
                     && !EventSystem.current.IsPointerOverGameObject())
                 {
-                    shootLine.gameObject.SetActive(false);
+                    shootLine.SetLineActive(false);
                     numPelotasAct = 0;          //Establecemos el nº de pelotas en el tablero
 
                     //Disparo de las pelotas
