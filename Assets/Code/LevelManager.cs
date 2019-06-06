@@ -10,19 +10,19 @@ public class LevelManager : MonoBehaviour
 {
 
     #region Attributes
-
-    //ATRIBUTOS DE LEVELMANAGER
-
+    /// <summary>
+    /// Atributos del Level Manager
+    /// </summary>
     public static int numeroNivelActual = 0;
 
     LectorTXT lectorNivel;
     bool gameOver;
     public bool Pausa { get; set; }
-    public float puntuacionMaxima;                           //Limite de la barra. Si has llegado = 3 estrellas
-    private float puntuacionActual;
-    private int multiplicadorPuntuacion;
+    public float puntuacionMaxima;                           //Limite de la barra. Si has llegado al limite = 3 estrellas
+    private float puntuacionActual;                          //Puntuación
+    private int multiplicadorPuntuacion;                     //Contabilizador de combos
 
-    private int numeroEstrellas;
+    private int numeroEstrellas;                             //Número de estrellas conseguidas en el nivel
 
     private float timerDoubleClick = 0.25f;                   //Tiempo para determinar un doble click.
     private float lastClick;                                  //Tiempo del último click.
@@ -35,12 +35,17 @@ public class LevelManager : MonoBehaviour
 
     List<GameObject> ListaObjetosADestruir;
 
+    /// <summary>
+    /// Pelotas de la escena y lista que los almacena
+    /// </summary>
     public int numMaxPelotas;                                //Numero (máximo actual) de pelotas que va a generar el spawner.
     int numPelotasAct;                                      //Numero de pelotas por el tablero
     public Pelota PelotaPrefab;                             //Prefab de la pelota
     List<Pelota> ListaPelotas;                             //Array de pelotas
 
-
+    /// <summary>
+    /// Bloques de la escena y lista que los almacena
+    /// </summary>
     List<Bloque> ListaBloques;                              //Lista de Bloques
     public Bloque Bloque_1;                                 //Prefab del bloque 1
     public Bloque Bloque_2;                                 //Prefab del bloque 2
@@ -49,16 +54,23 @@ public class LevelManager : MonoBehaviour
     public Bloque Bloque_5;                                 //Prefab del bloque 5
     public Bloque Bloque_6;                                 //Prefab del bloque 6
 
+    /// <summary>
+    /// Powerups de la escena y lista que los almacena
+    /// </summary>
     List<GameObject> ListaPowerUps;                         //Lista de los power ups de la escena.
     public GameObject PU_sumaPelotas1;                      //Prefab del powerup
     public GameObject PU_sumaPelotas2;                      //Prefab del powerup
     public GameObject PU_sumaPelotas3;                      //Prefab del powerup
-
+    
     public GameObject PU_Laser_Horizontal;                  //Prefab del laser horizontal
     public GameObject PU_Laser_Vertical;                    //Prefab del laser vertical
 
+    [HideInInspector] public int PrecioPowerUp = 25;        //Coste de comprar powerups
 
 
+    /// <summary>
+    /// Spawner y atributos relacionados
+    /// </summary>
     public Spawner spawner;                                 //Spawner del nivel
     public ShootLine shootLine;                          //Marca la trayectoria de disparo
     bool llegadaPrimeraPelota;                              //Bool que determina si ha llegado la primera serpiente
@@ -187,12 +199,6 @@ public class LevelManager : MonoBehaviour
             
         }
     }
-
-
-
-  
-
-
 
     #region Level Manager Methods
     /// <summary>

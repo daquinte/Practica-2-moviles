@@ -42,6 +42,7 @@ public class CanvasManager : MonoBehaviour
     public Sprite estrellaConseguida;
     public SpriteRenderer avanceRapido;
 
+    //Instancia de CanvasManager
     public static CanvasManager instance;
 
     //Awake is always called before any Start functions
@@ -106,11 +107,11 @@ public class CanvasManager : MonoBehaviour
     {
         for (int i = 0; i < 2; i++)
         {
-            //Igual hacerlo con setActive y no active es mas elegante, el color no tiene sentido si no vas a hacer fade gilipollas :)))
-            avanceRapido.color = new Color(avanceRapido.color.r, avanceRapido.color.g, avanceRapido.color.b, 1);
-            yield return new WaitForSeconds(0.2f);
-            avanceRapido.color = new Color(avanceRapido.color.r, avanceRapido.color.g, avanceRapido.color.b, 0);
-            yield return new WaitForSeconds(0.2f);
+            avanceRapido.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.3f);
+            avanceRapido.gameObject.SetActive(false);
+            yield return new WaitForSeconds(0.3f);
+
         }
 
         yield break;

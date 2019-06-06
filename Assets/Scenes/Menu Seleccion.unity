@@ -1623,7 +1623,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Niveles
+  m_Text: "\xA1Jugar!"
 --- !u!222 &1686156593
 CanvasRenderer:
   m_ObjectHideFlags: 0
