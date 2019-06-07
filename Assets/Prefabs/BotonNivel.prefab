@@ -161,7 +161,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114368696747273552, guid: c55f4fcf2d620d4418bd378d9b40be05,
+      - m_Target: {fileID: 114540665977088120, guid: c55f4fcf2d620d4418bd378d9b40be05,
           type: 2}
         m_MethodName: Carga_Nivel
         m_Mode: 1

@@ -21,7 +21,6 @@ public class EnciendeEstrellasMenu : MonoBehaviour {
             Image estrellaAux = Instantiate(EstrellaBase, transform);
             estrellaAux.transform.localPosition += new Vector3(40 * i, 0, 0);
             estrellas[i] = estrellaAux;
-            Debug.Log(estrellas[i]);
 
         }
     }
