@@ -124,7 +124,6 @@ public class CanvasManager : MonoBehaviour
     public void SetMaxPuntuacion(float maxValue)
     {
         PuntosMaximos = maxValue;
-        Debug.Log("PUNTOS MAXIMOS: " + PuntosMaximos);
     }
     #endregion
 
@@ -216,7 +215,7 @@ public class CanvasManager : MonoBehaviour
     {
 
 
-        if (!GameManager.instance.RestaDiamantes(25))
+        if (!GameManager.instance.RestaDiamantes(LevelManager.instance.PrecioPowerUp))
         {
             botonAceptarPago.gameObject.SetActive(false);
             botonCancelarPago.gameObject.SetActive(false);
@@ -251,7 +250,7 @@ public class CanvasManager : MonoBehaviour
     IEnumerator Glow(Button Boton)
     {
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(3);
 
         ColorBlock colorB = botonRegresarSpawner.colors;
         Color original = colorB.normalColor;

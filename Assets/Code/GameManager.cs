@@ -225,7 +225,6 @@ public class GameManager : MonoBehaviour
 
         nivelesAccesibles[nivel - 1] = true;
         Save();
-        Debug.Log("He guardado el nivel " + (nivel - 1));
 
     }
 
