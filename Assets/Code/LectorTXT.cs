@@ -44,10 +44,6 @@ public class LectorTXT : MonoBehaviour
             reader = new StreamReader(path);
 #endif
 
-
-
-            if (reader != null) Debug.Log(reader + " abierto con exito");
-
             // You generally use the "using" statement for potentially memory-intensive objects
             // instead of relying on garbage collection.
             using (reader)

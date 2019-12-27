@@ -8,8 +8,8 @@ public class ScalableCamera : MonoBehaviour
     void Start()
     {
         float TARGET_WIDTH = 960.0f;
-        float TARGET_HEIGHT = 540.0f;
-        int PIXELS_TO_UNITS = 35; // 1:1 ratio of pixels to units
+        float TARGET_HEIGHT = 640.0f;
+        int PIXELS_TO_UNITS = 42; // 1:1 ratio of pixels to units
 
         float desiredRatio = TARGET_WIDTH / TARGET_HEIGHT;
         float currentRatio = (float)Screen.width / (float)Screen.height;

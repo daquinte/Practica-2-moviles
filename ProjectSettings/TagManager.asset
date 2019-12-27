@@ -12,6 +12,8 @@ TagManager:
   - PowerUp1
   - PowerUp2
   - PowerUp3
+  - PowerUpLaserVertical
+  - PowerUpLaserHorizontal
   layers:
   - Default
   - TransparentFX
@@ -24,7 +26,7 @@ TagManager:
   - PostProcessing
   - Pelota
   - Bloque
-  - 
+  - PowerUp
   - 
   - 
   - 
@@ -48,4 +50,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Canvas
+    uniqueID: 341493557
     locked: 0

@@ -21,8 +21,17 @@ public class ShootLine : MonoBehaviour {
 
         // Update position of the two vertex of the Line Renderer
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-
+       
         line.SetPosition(0, mousePos);
-        line.SetPosition(1, Spawner.transform.position);
+        line.SetPosition(1, Spawner.transform.localPosition);
+    }
+
+    /// <summary>
+    /// Es llamado para poner el estado del gameobject al valor dado
+    /// </summary>
+    /// <param name="state">Estado</param>
+    public void SetLineActive(bool state)
+    {
+        gameObject.SetActive(state);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 //Serialization
 using System.Runtime.Serialization.Formatters.Binary;
@@ -13,14 +15,14 @@ using System.IO;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-
-
-    public int Rubies { get; set; }                       //Moneda de pago
-    public int Estrellas { get; set; }                    //Moneda F2P
+    public int Diamantes;           //Moneda de pago
+    int Estrellas;                  //Moneda F2P
 
     bool[] nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
     int[] estrellasPorNivel;                        //Guardas las estrellas por nivel
     int[] puntosPorNivel;                           //Guarda los puntos por nivel
+
+    int NumNiveles = 9;
 
     #region Singleton
     public static GameManager instance;
@@ -37,6 +39,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         //InitGame();
+
     }
     #endregion  //Awake and Singleton
 
@@ -44,15 +47,29 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 
+        if (Diamantes == 0) Diamantes = 1000;
+        Estrellas = 0;
+
+        nivelesAccesibles = new bool[NumNiveles+1];
+        for (int i = 0; i < NumNiveles; i++)
+        {
+            nivelesAccesibles[i] = false;
+        }
+        nivelesAccesibles[0] = true;
+
+        estrellasPorNivel = new int[NumNiveles+1];
+        puntosPorNivel = new int[NumNiveles+1];
+        //For para inicializar los vectores de estrellas y puntos
+        for (int i = 0; i < NumNiveles; i++)
+        {
+            estrellasPorNivel[i] = 0;
+            puntosPorNivel[i] = 0;
+        }
+
+
+        Load();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    //Esto no acabará estando aqui
 
     /// <summary>
     /// Guarda el estado del juego en un .dat
@@ -65,7 +82,7 @@ public class GameManager : MonoBehaviour
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/ProgresoJugador.dat");
 
-        PlayerData data = new PlayerData(Rubies, Estrellas);
+        PlayerData data = new PlayerData(Diamantes, Estrellas, nivelesAccesibles, estrellasPorNivel, puntosPorNivel);
 
         //Serializamos data y lo guardamos en file
         bf.Serialize(file, data);
@@ -74,7 +91,10 @@ public class GameManager : MonoBehaviour
         file.Close();
     }
 
-
+    /// <summary>
+    /// Carga el estado del archivo .dat previamente creado
+    /// si este existiera.
+    /// </summary>
     public void Load()
     {
         //Comprobamos si el archivo existe antes de abrirlo
@@ -84,34 +104,139 @@ public class GameManager : MonoBehaviour
             FileStream file = File.Open(Application.persistentDataPath + "/ProgresoJugador.dat", FileMode.Open);
 
             //Tenemos que castear la deserializacion que ha leido a Playerdata
-            PlayerData data =(PlayerData)bf.Deserialize(file);
+            PlayerData data = (PlayerData)bf.Deserialize(file);
             file.Close();
 
-            //Esto hay que ponerlo mejor, es para la prueba!
             Estrellas = data._estrellas;
-            Rubies = data._rubies;
+            Diamantes = data._diamantes;
+
+            for (int i = 0; i < 10; i++)
+            {
+                nivelesAccesibles[i] = data._nivelesAccesibles[i];
+                estrellasPorNivel[i] = data._estrellasPorNivel[i];
+                puntosPorNivel[i] = data._puntosPorNivel[i];
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// Reset de los valores del GameManager al estado inicial
+    /// </summary>
+    public void Reset()
+    {
+        Estrellas = 0;
+        Diamantes = 100;
+
+        for (int i = 0; i < NumNiveles; i++)
+        {
+            nivelesAccesibles[i] = false;
+        }
+        nivelesAccesibles[0] = true;
+
+        for (int i = 0; i < NumNiveles; i++)
+        {
+            estrellasPorNivel[i] = 0;
+            puntosPorNivel[i] = 0;
         }
     }
+    
 
     //Datos que vamos a guardar en el .dat; Se podría hacer mejor.
     //Estos datos se tienen que serializar
     [System.Serializable]
-    class PlayerData
+    class PlayerData : System.Object
     {
-        public PlayerData (int rubies, int estrellas)
+        public PlayerData(int Diamantes, int estrellas, bool[] niveles, int[] estrellasNivel, int[] puntosNivel)
         {
-            _rubies = rubies;
+            _diamantes = Diamantes;
             _estrellas = estrellas;
+
+            _nivelesAccesibles = niveles;
+            _estrellasPorNivel = estrellasNivel;
+            _puntosPorNivel = puntosNivel;
         }
 
-        public int _rubies;
-        public int _estrellas;
+
+        public int _diamantes { get; set; }
+        public int _estrellas { get; set; }
+
+        public bool[] _nivelesAccesibles;                       //Guarda los niveles accesibles por el jugador
+        public int[] _estrellasPorNivel;                       //Guardas las estrellas por nivel
+        public int[] _puntosPorNivel;                          //Guardamos los puntos por nivel
     }
 
-
-    private void OnGUI()
+    /// <summary>
+    /// Resta num Diamantes al contador global de Diamantes del juego
+    /// </summary>
+    /// <param name="num"></param>
+    public bool RestaDiamantes(int num)
     {
-        GUI.Label(new Rect(10, 10, 100, 30), "Estrellas: " + Estrellas);
-        GUI.Label(new Rect(10, 40, 150, 30), "Rubies: " + Rubies);
+        if (Diamantes - num >= 0)
+        {
+            Diamantes -= num;
+            return true;
+        }
+
+        else return false;
+
+
     }
+
+    public void SumaDiamantes(int suma) 
+    {
+        Diamantes += suma;
+    }
+
+    //GETTERS Diamantes Y ESTRELLAS
+    public int GetDiamantes() { return Diamantes; }
+    public int GetEstrellas() { return Estrellas; }
+
+    public int GetEstrellasDelNivel(int nivel) { return estrellasPorNivel[nivel - 1]; }
+
+    public void SumaEstrellas(int nivel)
+    {
+        
+        if (estrellasPorNivel[nivel - 1] < 3)
+        {
+            Estrellas++;
+            Debug.Log(Estrellas);
+            estrellasPorNivel[nivel - 1]++;
+        }
+
+        Save();
+    }
+
+    public void CargaNivel(int nivel)
+    {
+
+        if (nivelesAccesibles[nivel - 1])
+        {
+            SceneManager.LoadScene("GameScene");
+            LevelManager.numeroNivelActual = nivel;
+        }
+    }
+
+    /// <summary>
+    /// Abre el acceso a los niveles superados en el menú de selección de nivel
+    /// </summary>
+    public void DesbloqueaNivel(int nivel)
+    {
+
+        nivelesAccesibles[nivel - 1] = true;
+        Save();
+
+    }
+
+    /// <summary>
+    /// Dado un nivel, devuelve si está bloqueado o no
+    /// </summary>
+    /// <param name="nivel"></param>
+    /// <returns></returns>
+    public bool NivelDesbloqueado(int nivel)
+    {
+        return nivelesAccesibles[nivel-1];
+        
+    }
+
 }

@@ -8,12 +8,25 @@ bola que alcanza el límite inferior determina la posición exacta desde la que 
 demás se concentrarán en ese punto.
 Tras cada disparo los bloques que no hayan sido destruídos descienden una posición. Si descienden mucho, el jugador pierde la partida
 
-###### Requisitos de implementacion
+###### Requisitos de recuperación
 
-- [x] Adaptar correctamente la visualización en pantalla en función de la relación de aspecto (ancho-alto) del dispositivo.
-- [x] Leer los mapas de ficheros de texto.
-- [ ] Incluir al menos un tipo de bloque especial
-- [x] Mantener el progreso del usuario (niveles desbloqueados) de tal forma que sea difícil romperlo y modificarlo externamente accediendo a los ficheros en el dispositivo.
-- [ ] Incorporar al menos un potenciador. Para ello será necesario incorporar monedavirtual, por lo que también deberá guardarse, de forma segura, la cantidad de rubíes
-      acumulados. El modo de conseguir esos rubíes puede escogerse como se desee.
-- [ ] Mostrar anuncios al usuario (con UnityAds) para monetizar el juego.
+- [X] No tenéis anuncios, que era una de los requisitos de la práctica.
+- [X] El emisor de bolas debería desaparecer durante un disparo (hasta que se vuelve a situar con la primera bola que cae).
+- [X] Si las bolas se quedan totalmente en horizontal no se puede seguir.
+- [X] El disparo de las bolas es incorrecto. Sale una primera y luego todas las demás de golpe demasiado seguidas (y a distinta        velocidad que la primera). Había que usar el fixed update. (Está pero sin Fixed Update)
+- [X] Se notifica que el nivel se ha completado antes de que todas las bolas lleguen abajo.
+- [ ] Las etiquetas del número de golpeos pendientes de los bloques no quedan bien colocadas.
+- [ ] El disparador es extraño. A veces no detecta que se suelta, y se queda la línea activada erróneamente.
+- [X] Se pierde antes de tiempo. La fila justo por encima del punto de disparo es válida para los bloques.
+- [X] El ancho del tablero es mayor que el del juego original. Si una fila está llena de tiles, no debía haber hueco en los laterales para que las bolas entraran. Solo pasa en el primer nivel, es intencionado.
+- [X] El número de bolas que se dispara es muy bajo.
+- [ ] El cálculo de la dirección de disparo no es muy fino. La línea no sale en el punto de pulsación.
+- [X] El GUI de selección de nivel está hecho a mano. Con los mapas en datos que pueden crecer arbitrariamente, poner una restricción así es muy mala idea (aparte de que el GUI es un caos y no se sabe cuáles están bloqueados y cuáles no).
+- [X] No deberíais tener ya mensajes de log.
+- [X] Las bolas van demasiado lentas…
+- [X] Los rayos NO CAEN en el tablero. ¿¿¡¡Por qué!!?? Ocurre que se solapan rayos con bloques cuando estos caen.
+- [X] Cuando se pulsa sobre ""Comprar power up"" se activa el disparo…
+- [X] No es bueno avisar de los singleton. ¿Seguro que necesitáis tantos?
+- [X] PowerUpLaserVertical y PowerUpLaserHorizontal son iguales salvo por una pequeñez. Debería haber sido una única clase.
+- [X] Se debe minimizar el uso de Update() y FixedUpdate(). Dejar esos métodos vacíos es muy mal síntoma. 
+ 

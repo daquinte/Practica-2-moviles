@@ -743,9 +743,9 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 
-  projectName: 
-  organizationId: 
+  cloudProjectId: ffc1c6ad-7184-4f4c-9188-f49644596f5e
+  projectName: MovilesP2D
+  organizationId: quintero-bernal
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
